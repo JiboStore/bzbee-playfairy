@@ -32,5 +32,6 @@
     <orderEntry type="library" name="scala-sdk-2.10.6" level="project" />
     <orderEntry type="library" name="playfairy" level="project" />
     <orderEntry type="library" name="com.google.code.sbt-compiler-maven-plugin:sbt-compiler-api:1.0.0-beta3" level="project" />
+    <orderEntry type="library" name="com.google.code.play2-maven-plugin:play2-provider-play24:1.0.0-beta1" level="project" />
   </component>
 </module>
