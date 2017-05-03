@@ -2,4 +2,11 @@
 
 @main("Welcome to Play") {
   <h1>Hello world!</h1>
+  <p>
+  <a href="@routes.Assets.versioned("images/favicon.png")">Play Icon</a>
+  </p>
+  <p>
+  <!-- <a href="@routes.Assets.versioned("hardcoded.plist")">Download hardcoded ipa</a> -->
+  <a href="itms-services://?action=download-manifest&amp;url=https://10.6.0.18:9443/hardcoded.plist">Download hardcoded ipa</a>
+  </p>
 }
