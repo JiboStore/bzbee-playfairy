@@ -2,7 +2,7 @@ logs
 target
 /.idea
 /.idea_modules
-/.classpath
-/.project
+#/.classpath
+#/.project
 /.settings
 /RUNNING_PID
