@@ -17,10 +17,10 @@ import javax.inject.Singleton;
 @Singleton
 public class Filters extends DefaultHttpFilters {
 
-    @Inject
-    public Filters(CSRFFilter csrfFilter,
-                   AllowedHostsFilter allowedHostsFilter,
-                   SecurityHeadersFilter securityHeadersFilter) {
-        super(csrfFilter, allowedHostsFilter, securityHeadersFilter);
-    }
+//    @Inject
+//    public Filters(CSRFFilter csrfFilter,
+//                   AllowedHostsFilter allowedHostsFilter,
+//                   SecurityHeadersFilter securityHeadersFilter) {
+//        super(csrfFilter, allowedHostsFilter, securityHeadersFilter);
+//    }
 }
