@@ -13,7 +13,7 @@ public class DownloadController extends Controller {
      */
     public Result index() {
 //        return ok(views.html.index.render());
-    	return ok(com.playfairy.controllers.views.html.index.render());
+    	return ok(com.playfairy.controllers.views.html.download.index.render());
     }
 
 }
