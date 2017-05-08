@@ -1,6 +1,9 @@
 package com.playfairy.controllers;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -27,7 +30,13 @@ public class UploadController extends Controller {
     	if ( ipaFile != null ) {
     		String szFileName = ipaFile.getFilename();
     		String szContentType = ipaFile.getContentType();
-    		String szDebug = "File received: " + szFileName + " ContentType: " + szContentType + " size: " + ipaFile.getFile().length();
+    		String szFullFilePath = ipaFile.getFile().getAbsolutePath();
+    		String szDebug = "File received: " + szFileName + " Path: " + szFullFilePath  + " ContentType: " + szContentType + " size: " + ipaFile.getFile().length();
+    		try {
+    			FileUtils.moveFile(ipaFile.getFile(), new File("public/ipa/uploads/01.ipa"));
+    		} catch ( IOException ioe ) {
+    			return ok(ioe.getMessage());
+    		}
     		return ok(szDebug);
     	} else {
     		return badRequest();
