@@ -1,0 +1,121 @@
+in root project directory, run "sbt shell >> run" or just "sbt run"
+application will be accessible in http://localhost:9000
+
+to serve https, we will need apache web server to proxy the request to the application
+1. Download MAMP 4.1.1
+2. clone https://github.com/JiboStore/mamp_conf_4.1.1.git commit sha: bfd442a716a1884878d10b1d31e42d83b8a4a61f
+3. overwrite the conf directory of MAMP
+4. run: sudo /Application/MAMP/Library/bin/apachectl start
+5. Application will be available in https://localhost:9443/
+
+
+==========
+Appendices
+==========
+
+How to generate the self signed certificate:
+Source: http://www.webopius.com/content/355/getting-mamp-working-with-ssl-on-os-x
+
+Richmond | London | UK | Web Design » Client Login » Apps Webopius Enterprise Web Design LogoContact Us
+
+Search
+Home Web Design SEO Graphic Design Project Management ASPDotNetStorefront Company News Support Forum
+October 13, 2009
+Getting MAMP working with SSL on OS X
+
+Filed under: Tips — Tags: ecommerce, mac, mamp, ssl — Webopius @ 11:05 am
+At Webopius we develop a fair number of e-Commerce based sites, all of which use Secure Sockets Layer (SSL) to ensure the security of personal information entered and communicated via the browser.
+
+In many cases, we have a live site deployed and we have a development environment running locally within a Mac OS X based system running MAMP (www.mamp.info). Normally, MAMP doesn’t have the configuration settings to allow Apache to run with SSL support so this guide is intended to show you how to change that and run a functional site with support for both http:// and https:// connections using MAMP.
+
+What we will be doing is configuring MAMP to use ports 80 (http) and 443 (SSL) rather than the 8888 port it uses as standard. We will also be changing the configuration to allow you to stop and start both http and https services using the standard MAMP console rather than having to use the command line.
+
+Step 1: Backup!
+Before making any changes to MAMP, please backup your MAMP install. At the very minimum, take copies of the conf/apache/httpd.conf and conf/apache/ssl.conf files as we will be editing these.
+
+Step 2: Stop any other web server running on your machine
+Because we are going to change the port that MAMP uses for http traffic (usually 8888), you need to make sure that no other process is currently using ports 80 and 443. You can check this by typing netstat at the terminal. The usual suspect is the Mac’s own apache server which you will need to stop if it is running.
+
+Step 3. Create a self signed SSL certificate
+For development purposes, you need to create an SSL certificate. Of course for your live commercial site, you will need to purchase an authenticated certificate (we use Comodo SSL for ours) but for development purposes you can create your own free SSL certificate as follows:
+
+Generate a private key
+
+From the OS X terminal, type:
+
+openssl genrsa -des3 -out server.key 1024
+enter a password (twice)
+
+Generate Certificate Signing Request (CSR)
+
+openssl req -new -key server.key -out server.csr
+enter the password you used above for the server key
+
+Now, answer the questions it asks you, an example is shown below. The MOST important field is the Common Name which must match the domain name you are using locally (e.g. dev.mysite.com)
+
+
+Country Name (2 letter code) [AU]:GB
+State or Province Name (full name) [Some-State]:Surrey
+Locality Name (eg, city) []:Richmond
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Webopius Ltd
+Organizational Unit Name (eg, section) []:Development
+Common Name (eg, YOUR name) []:dev.mywebsite.com
+Email Address []:sales@webopius.com
+A challenge password []:
+An optional company name []:
+
+(We left the challenge password blank)
+
+Generate the Certificate
+
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+enter the password you used for the private key
+
+Remove password from the server key
+
+cp server.key server.tmp
+openssl rsa -in server.tmp -out server.key
+
+Move the Certificate and key into the MAMP configuration
+
+mkdir /Applications/MAMP/conf/ssl
+cp server.crt /Applications/MAMP/conf/ssl
+cp server.key /Applications/MAMP/conf/ssl
+
+Step 5. Edit MAMP Apache Configuration to support SSL
+What we will do now, is tell MAMP to support SSL each time that it starts. Normally, you would tell Apache to to this from the command line by typing apachectl startssl but we need the convenience of starting MAMP from the standard MAMP dashboard or application window.
+
+Edit the MAMP ssl.conf file (/Applications/MAMP/conf/apache/ssl.conf)
+
+– Comment out the line that looks for SSL being defined  (change <IfDefine SSL> to #<IfDefine SSL>)
+
+– Comment out the closing define  (change </IfDefine SSL> to #</IfDefine SSL>)
+
+– Change the SSLCertificateFile entry to: SSLCertificateFile /Applications/MAMP/conf/ssl/server.crt
+– Change the SSLCertificateKeyFile entry to: SSLCertificateKeyFile /Applications/MAMP/conf/ssl/server.key
+
+– [optionally] add a VirtualHost entry for your website (after the existing VirtualHost section) as follows:
+
+<VirtualHost dev.puddingclub.com:443>
+DocumentRoot [directory location of mywebsite]
+ServerName dev.mywebsite.com
+SSLEngine on
+SSLCertificateFile /Applications/MAMP/conf/ssl/server.crt
+SSLCertificateKeyFile /Applications/MAMP/conf/ssl/server.key
+</VirtualHost>
+
+Step 6. Edit MAMP Apache HTTP Configuration to use SSL as standard
+Finally, we will edit the MAMP http configuration to listen on ports 80 and 443 (rather than 8888), include the SSL configuration and listed to the SSL ports by default.
+
+Edit the MAMP httpd.conf file (/Applications/MAMP/conf/apache/httpd.conf)
+
+– Change ‘Listen’ to: Listen 127.0.0.1:80 (rather than 8888)
+– Load SSL as standard by commenting out the define SSL statements as you did previously: <IfDefine SSL> and </IfDefine SSL> 
+– Change ‘ServerName’ to: ServerName localhost:80 (rather than 8888)
+
+Remove or change any references in your Virtual Hosts to port 8888 to port 80.
+
+Step 7. Restart Apache
+Finally, stop the existing MAMP Apache process and restart.
+
+You *should* now be able to view http://www.yoursite.com AND https://www.yoursite.com.
