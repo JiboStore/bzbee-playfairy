@@ -2,6 +2,9 @@ package com.playfairy.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 
@@ -26,14 +29,27 @@ public class UploadController extends Controller {
     
     public Result ipa() {
     	MultipartFormData<File> ipaBody = request().body().asMultipartFormData();
+    	Map<String, String[]> params = ipaBody.asFormUrlEncoded();
     	FilePart<File> ipaFile = ipaBody.getFile("ipa");
     	if ( ipaFile != null ) {
     		String szFileName = ipaFile.getFilename();
     		String szContentType = ipaFile.getContentType();
     		String szFullFilePath = ipaFile.getFile().getAbsolutePath();
     		String szDebug = "File received: " + szFileName + " Path: " + szFullFilePath  + " ContentType: " + szContentType + " size: " + ipaFile.getFile().length();
+    		if ( params != null ) {
+    			szDebug += "\n";
+    			Iterator<Entry<String, String[]>> it = params.entrySet().iterator();
+    			while ( it.hasNext() ) {
+    				Entry<String, String[]> entry = it.next();
+    				szDebug += entry.getKey() + " : " + entry.getValue()[0] + "\n";
+    			}
+    		}
     		try {
-    			FileUtils.moveFile(ipaFile.getFile(), new File("public/ipa/uploads/01.ipa"));
+    			File destFile = new File("public/ipa/uploads/01.ipa");
+    			if ( destFile.exists() ) {
+    				destFile.delete();
+    			}
+    			FileUtils.moveFile(ipaFile.getFile(), destFile);
     		} catch ( IOException ioe ) {
     			return ok(ioe.getMessage());
     		}
