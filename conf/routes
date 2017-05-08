@@ -10,3 +10,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 #GET     /playfairy/download         controllers.HomeController.index()
 GET		/playfairy/download			com.playfairy.controllers.DownloadController.index()
+
+GET		/playfairy/upload			com.playfairy.controllers.UploadController.index()
+POST	/playfairy/upload/ipa		com.playfairy.controllers.UploadController.ipa()
