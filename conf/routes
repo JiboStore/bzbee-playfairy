@@ -9,7 +9,8 @@ GET     /                           controllers.HomeController.index
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 #GET     /playfairy/download         controllers.HomeController.index()
-GET		/playfairy/download			com.playfairy.controllers.DownloadController.index()
+GET		/playfairy/download/index	com.playfairy.controllers.DownloadController.index()
+GET		/playfairy/download/ipa		com.playfairy.controllers.DownloadController.ipa()
 
 GET		/playfairy/upload/index		com.playfairy.controllers.UploadController.index()
 POST	/playfairy/upload/ipa		com.playfairy.controllers.UploadController.ipa()

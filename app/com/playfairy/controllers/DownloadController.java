@@ -15,5 +15,13 @@ public class DownloadController extends Controller {
 //        return ok(views.html.index.render());
     	return ok(com.playfairy.controllers.views.html.download.index.render());
     }
+    
+    public Result ipa() {
+  	return ok(com.playfairy.controllers.views.html.download.index.render());
+  }
+    
+    public Result itmsplist() {
+    	return ok(com.playfairy.controllers.views.html.download.itmsplist.render("8898"));
+    }
 
 }
