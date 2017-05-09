@@ -118,9 +118,14 @@ public class UploadController extends Controller {
     			szRevision = revisionList[0];
     			boolean bSaveResult = saveUploadedIpa(szRevision, ipaFilepart.getFile());
     			if ( bSaveResult ) {
-    				return ok("Saved " + szRevision + ".ipa");
+    				int iResult = generatePlist(szRevision);
+    				if ( iResult == 1 ) {
+    					return ok("Saved " + szRevision + ".ipa");
+    				} else {
+    					return forbidden("Saved ipa file but unable to generate plist, you might want to generate it manually");
+    				}
     			} else {
-    				return ok("Unable to save " + szRevision + ".ipa");
+    				return internalServerError("Unable to save " + szRevision + ".ipa");
     			}
     		} else {
     			return badRequest("revision cannot be empty!");
