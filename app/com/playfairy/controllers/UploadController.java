@@ -25,7 +25,7 @@ public class UploadController extends Controller {
 	 * @param ipaBasename - the base filename of the ipa file eg: for CasinoDeluxeByIGG.ipa, id is CasinoDeluxeByIGG
 	 * @return
 	 */
-    public int generatePlist(String ipaBasename) {
+    public int generatePlist(String szHostname, String ipaBasename) {
     	String szIpaDir = "public/ipa/uploads/";
     	String szPlistDir = "public/ipa/plists/";
     	File ipaDir = new File(szIpaDir);
@@ -64,7 +64,7 @@ public class UploadController extends Controller {
     			String szPlistFile = szPlistDir + ipaNames.get(i) + ".plist";
     			File ipaFile = new File(szIpaFile);
     			if ( ipaFile.exists() ) {
-    				String szPlistContent = com.playfairy.controllers.views.html.download.plisttemplate.render(ipaNames.get(i)).toString();
+    				String szPlistContent = com.playfairy.controllers.views.html.download.plisttemplate.render(szHostname, ipaNames.get(i)).toString();
     				FileUtils.writeStringToFile(new File(szPlistFile), szPlistContent, false);
     			}
     		}
@@ -103,6 +103,7 @@ public class UploadController extends Controller {
     }
     
     public Result ipa() {
+    	String szHostname = request().host();
     	MultipartFormData<File> ipaBody = request().body().asMultipartFormData();
     	Map<String, String[]> params = ipaBody.asFormUrlEncoded();
     	FilePart<File> ipaFilepart = ipaBody.getFile("ipa");
@@ -118,7 +119,7 @@ public class UploadController extends Controller {
     			szRevision = revisionList[0];
     			boolean bSaveResult = saveUploadedIpa(szRevision, ipaFilepart.getFile());
     			if ( bSaveResult ) {
-    				int iResult = generatePlist(szRevision);
+    				int iResult = generatePlist(szHostname, szRevision);
     				if ( iResult == 1 ) {
     					return ok("Saved " + szRevision + ".ipa");
     				} else {
@@ -140,7 +141,8 @@ public class UploadController extends Controller {
      * @return
      */
     public Result genplist(String id) {
-    	int iGenerated = generatePlist(id);
+    	String szHostname = request().host();
+    	int iGenerated = generatePlist(szHostname, id);
     	if ( iGenerated > 0 ) {
     		return ok("generated: " + iGenerated + " files");
     	} else {

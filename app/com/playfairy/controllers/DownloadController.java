@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import org.apache.commons.io.FilenameUtils;
 
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -19,12 +20,25 @@ public class DownloadController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
-    public Result index() {
+    public Result hardcoded() {
 //        return ok(views.html.index.render());
     	return ok(com.playfairy.controllers.views.html.download.index.render());
     }
     
+    public Result index() {
+    	return ipa();
+    }
+    
+    public Result test() {
+    	Logger.info(routes.DownloadController.ipa().url().toString()); // /playfairy/download/ipa
+    	Logger.info(routes.DownloadController.ipa().absoluteURL(request()).toString()); // http://10.6.0.18:9443/playfairy/download/ipa
+    	Logger.info(request().toString()); // GET /playfairy/download/test
+    	Logger.info(request().host());	// 10.6.0.81:9443
+    	return ok(request().uri().toString());
+    }
+    
     public Result ipa() {
+    	String szHostname = request().host();
     	List<String> ipaNames = new ArrayList<String>();
     	try {
     		File ipaDir = new File("public/ipa/uploads/");
@@ -39,17 +53,18 @@ public class DownloadController extends Controller {
     			}
     		}
     	} catch ( Exception ioe ) {
-    		return ok(com.playfairy.controllers.views.html.download.ipa.render(ipaNames));
+    		return ok(com.playfairy.controllers.views.html.download.ipa.render(szHostname, ipaNames));
     	}
-    	return ok(com.playfairy.controllers.views.html.download.ipa.render(ipaNames));
+    	return ok(com.playfairy.controllers.views.html.download.ipa.render(szHostname, ipaNames));
   }
     
     public Result plist(String id) {
+    	String szHostname = request().host();
     	response().setHeader("Accept-Ranges", "bytes");
     	response().setHeader("Cache-Control", "no-cache");
     	response().setHeader("Content-Type", "application/octet-stream");
 //    	return ok(com.playfairy.controllers.views.html.download.plist.render(id)).as("application/octet-stream");
-    	return ok(com.playfairy.controllers.views.html.download.plist.render(id));
+    	return ok(com.playfairy.controllers.views.html.download.plist.render(szHostname, id));
     }
 
 }
