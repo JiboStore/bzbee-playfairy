@@ -73,6 +73,23 @@ public class UploadController extends Controller {
     		return -1;
     	}
     }
+    
+    public boolean saveUploadedIpa(String revision, File ipaFile) {
+    	String szDestDir = "public/ipa/uploads/";
+    	String szDestFilename = szDestDir + revision + ".ipa";
+    	File pDestFile = new File(szDestFilename);
+    	if ( pDestFile.exists() ) {
+    		// delete old file
+    		pDestFile.delete();
+    	}
+    	try {
+			FileUtils.moveFile(ipaFile, pDestFile);
+		} catch (IOException e) {
+			Logger.debug(e.getMessage());
+			return false;
+		}
+    	return true;
+    }
 	
     /**
      * An action that renders an HTML page with a welcome message.
@@ -86,6 +103,34 @@ public class UploadController extends Controller {
     }
     
     public Result ipa() {
+    	MultipartFormData<File> ipaBody = request().body().asMultipartFormData();
+    	Map<String, String[]> params = ipaBody.asFormUrlEncoded();
+    	FilePart<File> ipaFilepart = ipaBody.getFile("ipa");
+    	if ( ipaFilepart != null ) {
+    		String szFilename = ipaFilepart.getFilename();
+    		String szContentType = ipaFilepart.getContentType();
+    		String szFullpath = ipaFilepart.getFile().getAbsolutePath();
+    		String szDebug = "File received: " + szFilename + " Path: " + szFullpath  + " ContentType: " + szContentType + " size: " + ipaFilepart.getFile().length();
+    		Logger.debug(szDebug);
+    		String[] revisionList = params.get("revision");
+    		String szRevision = "";
+    		if ( revisionList != null ) {
+    			szRevision = revisionList[0];
+    			boolean bSaveResult = saveUploadedIpa(szRevision, ipaFilepart.getFile());
+    			if ( bSaveResult ) {
+    				return ok("Saved " + szRevision + ".ipa");
+    			} else {
+    				return ok("Unable to save " + szRevision + ".ipa");
+    			}
+    		} else {
+    			return badRequest("revision cannot be empty!");
+    		}
+    	} else {
+    		return badRequest("ipa cannot be empty!");
+    	}
+    }
+    
+    public Result ipa_working() {
     	MultipartFormData<File> ipaBody = request().body().asMultipartFormData();
     	Map<String, String[]> params = ipaBody.asFormUrlEncoded();
     	FilePart<File> ipaFile = ipaBody.getFile("ipa");
