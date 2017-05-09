@@ -45,7 +45,11 @@ public class DownloadController extends Controller {
   }
     
     public Result plist(String id) {
-    	return ok(com.playfairy.controllers.views.html.download.plist.render(id)).as("application/octet-stream");
+    	response().setHeader("Accept-Ranges", "bytes");
+    	response().setHeader("Cache-Control", "no-cache");
+    	response().setHeader("Content-Type", "application/octet-stream");
+//    	return ok(com.playfairy.controllers.views.html.download.plist.render(id)).as("application/octet-stream");
+    	return ok(com.playfairy.controllers.views.html.download.plist.render(id));
     }
 
 }
