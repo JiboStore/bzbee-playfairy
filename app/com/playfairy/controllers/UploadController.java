@@ -21,6 +21,59 @@ import play.mvc.Result;
 
 public class UploadController extends Controller {
 	
+	/**
+	 * @param ipaBasename - the base filename of the ipa file eg: for CasinoDeluxeByIGG.ipa, id is CasinoDeluxeByIGG
+	 * @return
+	 */
+    public int generatePlist(String ipaBasename) {
+    	String szIpaDir = "public/ipa/uploads/";
+    	String szPlistDir = "public/ipa/plists/";
+    	File ipaDir = new File(szIpaDir);
+    	File plistDir = new File(szPlistDir);
+    	List<String> ipaNames = new ArrayList<String>();
+    	try {
+    		try {
+    			ipaDir.mkdirs();
+    			plistDir.mkdirs();
+    		} catch ( Exception e ) {
+    			Logger.debug("UploadController.genplist exception: " + e.getMessage());
+    		}
+    		if ( "0".equals(ipaBasename) ) {
+    			// generate for all ipas
+    			if ( ipaDir.exists() && ipaDir.isDirectory() ) {
+        			File[] ipaFiles = ipaDir.listFiles();
+        			if ( ipaFiles != null ) {
+        				for ( int i = 0; i < ipaFiles.length; i++ ) {
+        					if ( "ipa".equals(FilenameUtils.getExtension(ipaFiles[i].getName())) ) {
+        						if ( ipaFiles[i].exists() ) {
+        							ipaNames.add(FilenameUtils.getBaseName(ipaFiles[i].getName()));
+        						}
+        					}
+        				}
+        			}
+        		}
+    		} else {
+    			String szIpaName = szIpaDir + ipaBasename + ".ipa";
+    			File ipaFile = new File(szIpaName);
+    			if ( ipaFile.exists() ) {
+    				ipaNames.add(ipaBasename);
+    			}
+    		}
+    		for ( int i = 0; i < ipaNames.size(); i++ ) {
+    			String szIpaFile = szIpaDir + ipaNames.get(i) + ".ipa";
+    			String szPlistFile = szPlistDir + ipaNames.get(i) + ".plist";
+    			File ipaFile = new File(szIpaFile);
+    			if ( ipaFile.exists() ) {
+    				String szPlistContent = com.playfairy.controllers.views.html.download.plisttemplate.render(ipaNames.get(i)).toString();
+    				FileUtils.writeStringToFile(new File(szPlistFile), szPlistContent, false);
+    			}
+    		}
+    		return ipaNames.size();
+    	} catch ( Exception ioe ) {
+    		return -1;
+    	}
+    }
+	
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
@@ -70,6 +123,19 @@ public class UploadController extends Controller {
      * @return
      */
     public Result genplist(String id) {
+    	int iGenerated = generatePlist(id);
+    	if ( iGenerated > 0 ) {
+    		return ok("generated: " + iGenerated + " files");
+    	} else {
+    		return ok("fail to generate");
+    	}
+    }
+    
+    /**
+     * @param id - the base filename of the ipa file eg: for CasinoDeluxeByIGG.ipa, id is CasinoDeluxeByIGG
+     * @return
+     */
+    public Result genplist_working(String id) {
     	String szIpaDir = "public/ipa/uploads/";
     	String szPlistDir = "public/ipa/plists/";
     	File ipaDir = new File(szIpaDir);
