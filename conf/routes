@@ -15,3 +15,4 @@ GET		/playfairy/download/plist	com.playfairy.controllers.DownloadController.plis
 
 GET		/playfairy/upload/index		com.playfairy.controllers.UploadController.index()
 POST	/playfairy/upload/ipa		com.playfairy.controllers.UploadController.ipa()
+GET		/playfairy/upload/genplist	com.playfairy.controllers.UploadController.genplist(id: String?="0")

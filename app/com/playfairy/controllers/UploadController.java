@@ -2,12 +2,17 @@ package com.playfairy.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
+import play.Logger;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -58,6 +63,60 @@ public class UploadController extends Controller {
     		return badRequest();
     	}
 //    	return ok(com.playfairy.controllers.views.html.upload.index.render());
+    }
+    
+    /**
+     * @param id - the base filename of the ipa file eg: for CasinoDeluxeByIGG.ipa, id is CasinoDeluxeByIGG
+     * @return
+     */
+    public Result genplist(String id) {
+    	String szIpaDir = "public/ipa/uploads/";
+    	String szPlistDir = "public/ipa/plists/";
+    	File ipaDir = new File(szIpaDir);
+    	File plistDir = new File(szPlistDir);
+    	List<String> ipaNames = new ArrayList<String>();
+    	try {
+    		try {
+    			ipaDir.mkdirs();
+    			plistDir.mkdirs();
+    		} catch ( Exception e ) {
+    			Logger.debug("UploadController.genplist exception: " + e.getMessage());
+    		}
+    		if ( "0".equals(id) ) {
+    			// generate for all ipas
+    			if ( ipaDir.exists() && ipaDir.isDirectory() ) {
+        			File[] ipaFiles = ipaDir.listFiles();
+        			if ( ipaFiles != null ) {
+        				for ( int i = 0; i < ipaFiles.length; i++ ) {
+        					if ( "ipa".equals(FilenameUtils.getExtension(ipaFiles[i].getName())) ) {
+        						if ( ipaFiles[i].exists() ) {
+        							ipaNames.add(FilenameUtils.getBaseName(ipaFiles[i].getName()));
+        						}
+        					}
+        				}
+        			}
+        		}
+    		} else {
+    			String szIpaName = szIpaDir + id + ".ipa";
+    			File ipaFile = new File(szIpaName);
+    			if ( ipaFile.exists() ) {
+    				ipaNames.add(id);
+    			}
+    		}
+    		for ( int i = 0; i < ipaNames.size(); i++ ) {
+    			String szIpaFile = szIpaDir + ipaNames.get(i) + ".ipa";
+    			String szPlistFile = szPlistDir + ipaNames.get(i) + ".plist";
+    			File ipaFile = new File(szIpaFile);
+    			if ( ipaFile.exists() ) {
+    				String szPlistContent = com.playfairy.controllers.views.html.download.plisttemplate.render(ipaNames.get(i)).toString();
+    				FileUtils.writeStringToFile(new File(szPlistFile), szPlistContent, false);
+    			}
+    		}
+    		return ok("written: " + ipaNames.size());
+    	} catch ( Exception ioe ) {
+    		return ok(com.playfairy.controllers.views.html.download.ipa.render(ipaNames));
+    	}
+//    	return ok("Hello");
     }
 
 }
