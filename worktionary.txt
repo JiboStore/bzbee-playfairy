@@ -8,6 +8,8 @@ to serve https, we will need apache web server to proxy the request to the appli
 4. run: sudo /Application/MAMP/Library/bin/apachectl start
 5. Application will be available in https://localhost:9443/
 
+How to upload:
+curl -kv -F revision=3 -F ipa=@filename.ipa https://10.6.0.18:9443/playfairy/upload/ipa
 
 ==========
 Appendices

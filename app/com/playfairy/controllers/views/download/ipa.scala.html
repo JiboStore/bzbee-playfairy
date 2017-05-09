@@ -17,11 +17,12 @@
   <br><br>
   <p>
   @for( i <- 0 until ipaNames.size) {
-  	 <h3>
+  	 <!-- <h3>
   		<a href="itms-services://?action=download-manifest&amp;url=https://@(hostname)/playfairy/download/plist?id=@ipaNames(i)">Download dynamic @ipaNames(i)</a>
   	</h3>
+  	-->
   	<h2>
-  		<a href="itms-services://?action=download-manifest&amp;url=https://@(hostname)/assets/ipa/plists/@(ipaNames(i)).plist">Download generated @ipaNames(i)</a>
+  		<a href="itms-services://?action=download-manifest&amp;url=https://@(hostname)/assets/ipa/plists/@(ipaNames(i)).plist">Download generated R @(ipaNames(i)).ipa</a>
   	</h2>
   	}
   </p>
