@@ -9,7 +9,7 @@ to serve https, we will need apache web server to proxy the request to the appli
 5. Application will be available in https://localhost:9443/
 
 How to upload:
-curl -kv -F revision=3 -F ipa=@filename.ipa https://10.6.0.18:9443/playfairy/upload/ipa
+curl -kv -F revision=3 -F sha=a6ae05bc356324818659db4464077173c0529b44 -F ipa=@filename.ipa https://10.6.0.18:9443/playfairy/upload/ipa
 
 ==========
 Appendices
