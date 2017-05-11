@@ -30,11 +30,15 @@ public class UploadIpaEntry {
 	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date created;
 	
+	@Formats.DateTime(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date modified;
+	
 	public static UploadIpaEntry create(final String revision, final String sha) {
 		UploadIpaEntry entry = new UploadIpaEntry();
 		entry.revision = revision;
 		entry.sha = sha;
 		entry.created = new Date();
+		entry.modified = new Date();
 		MorphiaObject.datastore.save(entry);
 		return entry;
 	}
@@ -53,6 +57,13 @@ public class UploadIpaEntry {
 			Logger.error("UploadIpaEntry find: revision = " + revision + " sha: " + entry.sha + " date: " + entry.created);
 		}
 		return entry;
+	}
+	
+	public static List<String> getAllRevision() {
+		DBCollection collections = MorphiaObject.datastore.getCollection(UploadIpaEntry.class);
+		List allRevision = collections.distinct("revision");
+		List<String> allRevisionString = (List<String>) allRevision;
+		return allRevisionString;
 	}
 	
 //	public static List<String> getAllToken() {

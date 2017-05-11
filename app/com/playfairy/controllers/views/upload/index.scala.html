@@ -4,6 +4,7 @@
   <h1>Uploader!</h1>
   @helper.form( action = com.playfairy.controllers.routes.UploadController.ipa(), 'enctype -> "multipart/form-data") {
   	Revision: <input type="text" name="revision"/><br><br>
+  	SHA: <input type="text" name="sha"/><br><br>
   	<input type="file" name="ipa"/>
   	<p>
   		<input type="submit"/>

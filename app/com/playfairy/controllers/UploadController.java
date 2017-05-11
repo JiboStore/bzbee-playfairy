@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+
+import com.playfairy.models.UploadIpaEntry;
 
 import play.Logger;
 import play.mvc.BodyParser;
@@ -74,7 +77,7 @@ public class UploadController extends Controller {
     	}
     }
     
-    public boolean saveUploadedIpa(String revision, File ipaFile) {
+    public boolean saveUploadedIpa(String revision, String sha, File ipaFile) {
     	String szDestDir = "public/ipa/uploads/";
     	String szDestFilename = szDestDir + revision + ".ipa";
     	File pDestFile = new File(szDestFilename);
@@ -88,6 +91,15 @@ public class UploadController extends Controller {
 			Logger.debug(e.getMessage());
 			return false;
 		}
+    	// save entry to DB
+    	UploadIpaEntry entry = UploadIpaEntry.find(revision);
+    	if ( entry == null ) {
+    		entry = UploadIpaEntry.create(revision, sha);
+    	} else {
+    		entry.sha = sha;
+    		entry.modified = new Date();
+    		UploadIpaEntry.save(entry);
+    	}
     	return true;
     }
 	
@@ -114,10 +126,13 @@ public class UploadController extends Controller {
     		String szDebug = "File received: " + szFilename + " Path: " + szFullpath  + " ContentType: " + szContentType + " size: " + ipaFilepart.getFile().length();
     		Logger.debug(szDebug);
     		String[] revisionList = params.get("revision");
+    		String[] shaList = params.get("sha");
     		String szRevision = "";
+    		String szSha = "";
     		if ( revisionList != null ) {
     			szRevision = revisionList[0];
-    			boolean bSaveResult = saveUploadedIpa(szRevision, ipaFilepart.getFile());
+    			szSha = shaList[0];
+    			boolean bSaveResult = saveUploadedIpa(szRevision, szSha, ipaFilepart.getFile());
     			if ( bSaveResult ) {
     				int iResult = generatePlist(szHostname, szRevision);
     				if ( iResult == 1 ) {

@@ -8,6 +8,8 @@ import java.util.Vector;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.playfairy.models.UploadIpaEntry;
+
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -40,10 +42,14 @@ public class DownloadController extends Controller {
     		File ipaDir = new File("public/ipa/uploads/");
     		if ( ipaDir.exists() && ipaDir.isDirectory() ) {
     			File[] ipaFiles = ipaDir.listFiles();
+    			List<String> allRevisions = UploadIpaEntry.getAllRevision();
     			if ( ipaFiles != null ) {
     				for ( int i = 0; i < ipaFiles.length; i++ ) {
     					if ( "ipa".equals(FilenameUtils.getExtension(ipaFiles[i].getName())) ) {
-    						ipaNames.add(FilenameUtils.getBaseName(ipaFiles[i].getName()));
+    						String szFilebaseName = FilenameUtils.getBaseName(ipaFiles[i].getName());
+    						if ( allRevisions.contains(szFilebaseName) ) {
+    							ipaNames.add(szFilebaseName);
+    						}
     					}
     				}
     			}
