@@ -22,11 +22,7 @@ public class DownloadController extends Controller {
      */
     public Result hardcoded() {
 //        return ok(views.html.index.render());
-    	return ok(com.playfairy.controllers.views.html.download.index.render());
-    }
-    
-    public Result index() {
-    	return ipa();
+    	return ok(com.playfairy.controllers.views.html.download.hardcoded.render());
     }
     
     public Result test() {
@@ -37,7 +33,7 @@ public class DownloadController extends Controller {
     	return ok(request().uri().toString());
     }
     
-    public Result ipa() {
+    public Result index() {
     	String szHostname = request().host();
     	List<String> ipaNames = new ArrayList<String>();
     	try {
@@ -53,10 +49,14 @@ public class DownloadController extends Controller {
     			}
     		}
     	} catch ( Exception ioe ) {
-    		return ok(com.playfairy.controllers.views.html.download.ipa.render(szHostname, ipaNames));
+    		return ok(com.playfairy.controllers.views.html.download.index.render(szHostname, ipaNames));
     	}
-    	return ok(com.playfairy.controllers.views.html.download.ipa.render(szHostname, ipaNames));
+    	return ok(com.playfairy.controllers.views.html.download.index.render(szHostname, ipaNames));
   }
+    
+    public Result ipa() {
+    	return index();
+    }
     
     public Result plist(String id) {
     	String szHostname = request().host();
