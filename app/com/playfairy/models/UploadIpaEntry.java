@@ -9,11 +9,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
-import org.mongodb.morphia.query.Query;
 
 import com.mongodb.DBCollection;
+import com.playfairy.startup.MorphiaSingleton;
 
-import com.playfairy.datasources.MorphiaObject_Static;
 import play.Logger;
 import play.data.format.Formats;
 
@@ -39,16 +38,17 @@ public class UploadIpaEntry {
 		entry.sha = sha;
 		entry.created = new Date();
 		entry.modified = new Date();
-		MorphiaObject_Static.datastore.save(entry);
+		MorphiaSingleton.getInstance().getDatastore().save(entry);
 		return entry;
 	}
 	
 	public static void save(final UploadIpaEntry entry) {
-		MorphiaObject_Static.datastore.save(entry);
+		MorphiaSingleton.getInstance().getDatastore().save(entry);
 	}
 	
 	public static UploadIpaEntry find(String revision) {
-		UploadIpaEntry entry = MorphiaObject_Static.datastore.createQuery(UploadIpaEntry.class)
+		Logger.debug("UploadIpaEntry find: " + revision);
+		UploadIpaEntry entry = MorphiaSingleton.getInstance().getDatastore().createQuery(UploadIpaEntry.class)
 				.filter("revision", revision)
 				.get();
 		if ( entry == null ) {
@@ -60,14 +60,14 @@ public class UploadIpaEntry {
 	}
 	
 	public static List<String> getAllRevision() {
-		DBCollection collections = MorphiaObject_Static.datastore.getCollection(UploadIpaEntry.class);
+		DBCollection collections = MorphiaSingleton.getInstance().getDatastore().getCollection(UploadIpaEntry.class);
 		List allRevision = collections.distinct("revision");
 		List<String> allRevisionString = (List<String>) allRevision;
 		return allRevisionString;
 	}
 	
 //	public static List<String> getAllToken() {
-//		DBCollection collections = MorphiaObject.datastore.getCollection(CasinoApnsUser.class);
+//		DBCollection collections = MorphiaSingleton.getInstance().getDatastore().getCollection(CasinoApnsUser.class);
 //		List allToken = collections.distinct("token");
 //		List<String> allTokenString = (List<String>)allToken;
 //		for ( String szToken : allTokenString ) {
@@ -77,13 +77,13 @@ public class UploadIpaEntry {
 //	}
 //	
 //	public static List<CasinoApnsUser> getAllUsers() {
-//		Query<CasinoApnsUser> qUser = MorphiaObject.datastore.createQuery(CasinoApnsUser.class);
+//		Query<CasinoApnsUser> qUser = MorphiaSingleton.getInstance().getDatastore().createQuery(CasinoApnsUser.class);
 //		List<CasinoApnsUser> users = qUser.asList();
 //		return users;
 //	}
 //	
 //	public static CasinoApnsUser find(final String token) {
-//		CasinoApnsUser user = MorphiaObject.datastore.createQuery(CasinoApnsUser.class)
+//		CasinoApnsUser user = MorphiaSingleton.getInstance().getDatastore().createQuery(CasinoApnsUser.class)
 //				.filter("token", token)
 //				.get();
 //		if ( user == null ) {
@@ -95,14 +95,14 @@ public class UploadIpaEntry {
 //	}
 //	
 //	public static void save(final CasinoApnsUser user) {
-//		MorphiaObject.datastore.save(user);
+//		MorphiaSingleton.getInstance().getDatastore().save(user);
 //	}
 //
 //	public static CasinoApnsUser create(final String token) {
 //		CasinoApnsUser user = new CasinoApnsUser();
 //		user.token = token;
 //		user.created = new Date();
-//		MorphiaObject.datastore.save(user);
+//		morphia.getDatastore().save(user);
 //		return user;
 //	}
 
