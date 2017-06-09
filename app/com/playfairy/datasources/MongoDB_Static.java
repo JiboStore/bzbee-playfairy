@@ -15,7 +15,7 @@ import play.Play;
 
 import java.net.UnknownHostException;
 
-public final class MongoDB {
+public final class MongoDB_Static {
 
     /**
      * Connects to MongoDB based on the configuration settings.
@@ -28,32 +28,32 @@ public final class MongoDB {
 
         MongoClientURI mongoURI = new MongoClientURI(_mongoURI);
 
-        MorphiaObject.mongo = null;
+        MorphiaObject_Static.mongo = null;
 
         try {
-            MorphiaObject.mongo = new MongoClient(mongoURI);
+            MorphiaObject_Static.mongo = new MongoClient(mongoURI);
         }
         catch(UnknownHostException e) {
             Logger.info("Unknown Host");
         }
 
-        if (MorphiaObject.mongo != null) {
-            MorphiaObject.morphia = new Morphia();
-            MorphiaObject.datastore = MorphiaObject.morphia.createDatastore(MorphiaObject.mongo, mongoURI.getDatabase());
+        if (MorphiaObject_Static.mongo != null) {
+            MorphiaObject_Static.morphia = new Morphia();
+            MorphiaObject_Static.datastore = MorphiaObject_Static.morphia.createDatastore(MorphiaObject_Static.mongo, mongoURI.getDatabase());
 
             //Map classes
-            MorphiaObject.morphia.map(UploadIpaEntry.class);
+            MorphiaObject_Static.morphia.map(UploadIpaEntry.class);
 //            MorphiaObject.morphia.map(User.class);
 //            MorphiaObject.morphia.map(LinkedAccount.class);
 //            MorphiaObject.morphia.map(SecurityRole.class);
 //            MorphiaObject.morphia.map(TokenAction.class);
 //            MorphiaObject.morphia.map(UserPermission.class);
 
-            MorphiaObject.datastore.ensureIndexes();
-            MorphiaObject.datastore.ensureCaps();
+            MorphiaObject_Static.datastore.ensureIndexes();
+            MorphiaObject_Static.datastore.ensureCaps();
         }
 
-        Logger.debug("** Morphia datastore: " + MorphiaObject.datastore.getDB());
+        Logger.debug("** Morphia datastore: " + MorphiaObject_Static.datastore.getDB());
 
         return true;
     }
@@ -63,13 +63,13 @@ public final class MongoDB {
      * Disconnect from MongoDB.
      */
     public static boolean disconnect() {
-        if (MorphiaObject.mongo == null) {
+        if (MorphiaObject_Static.mongo == null) {
             return false;
         }
 
-        MorphiaObject.morphia = null;
-        MorphiaObject.datastore = null;
-        MorphiaObject.mongo.close();
+        MorphiaObject_Static.morphia = null;
+        MorphiaObject_Static.datastore = null;
+        MorphiaObject_Static.mongo.close();
         return true;
     }
 }

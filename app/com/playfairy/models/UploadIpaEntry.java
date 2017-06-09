@@ -13,7 +13,7 @@ import org.mongodb.morphia.query.Query;
 
 import com.mongodb.DBCollection;
 
-import com.playfairy.datasources.MorphiaObject;
+import com.playfairy.datasources.MorphiaObject_Static;
 import play.Logger;
 import play.data.format.Formats;
 
@@ -39,16 +39,16 @@ public class UploadIpaEntry {
 		entry.sha = sha;
 		entry.created = new Date();
 		entry.modified = new Date();
-		MorphiaObject.datastore.save(entry);
+		MorphiaObject_Static.datastore.save(entry);
 		return entry;
 	}
 	
 	public static void save(final UploadIpaEntry entry) {
-		MorphiaObject.datastore.save(entry);
+		MorphiaObject_Static.datastore.save(entry);
 	}
 	
 	public static UploadIpaEntry find(String revision) {
-		UploadIpaEntry entry = MorphiaObject.datastore.createQuery(UploadIpaEntry.class)
+		UploadIpaEntry entry = MorphiaObject_Static.datastore.createQuery(UploadIpaEntry.class)
 				.filter("revision", revision)
 				.get();
 		if ( entry == null ) {
@@ -60,7 +60,7 @@ public class UploadIpaEntry {
 	}
 	
 	public static List<String> getAllRevision() {
-		DBCollection collections = MorphiaObject.datastore.getCollection(UploadIpaEntry.class);
+		DBCollection collections = MorphiaObject_Static.datastore.getCollection(UploadIpaEntry.class);
 		List allRevision = collections.distinct("revision");
 		List<String> allRevisionString = (List<String>) allRevision;
 		return allRevisionString;
