@@ -24,7 +24,9 @@ libraryDependencies ++= Seq(
   filters,
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "be.objectify" %% "deadbolt-scala" % "2.5.0",
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.14"
 )
 
 resolvers ++= Seq(
@@ -34,3 +36,7 @@ resolvers ++= Seq(
   Resolver.url("MongoDB Java Driver", url("https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver"))(Resolver.ivyStylePatterns),
   Resolver.url("Objectify Play Repository", url("http://schaloner.github.io/releases/"))(Resolver.ivyStylePatterns)
 )
+
+routesGenerator := InjectedRoutesGenerator
+
+fork in run := true

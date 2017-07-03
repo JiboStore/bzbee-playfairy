@@ -18,3 +18,14 @@ GET		/playfairy/download/plist	com.playfairy.controllers.DownloadController.plis
 GET		/playfairy/upload/index		com.playfairy.controllers.UploadController.index()
 POST	/playfairy/upload/ipa		com.playfairy.controllers.UploadController.ipa()
 GET		/playfairy/upload/genplist	com.playfairy.controllers.UploadController.genplist(id: String?="0")
+
+# tester
+GET		/widgets/seeder/index		com.playfairy.controllers.WidgetsSeederController.index
+GET		/widgets/seeder/cleanup		com.playfairy.controllers.WidgetsSeederController.cleanup
+
+# API
+GET		/api/widgets				com.playfairy.controllers.WidgetsController.index
+POST	/api/widgets				com.playfairy.controllers.WidgetsController.create
+GET		/api/widgets/:id			com.playfairy.controllers.WidgetsController.read(id: String)
+PATCH	/api/widgets/:id			com.playfairy.controllers.WidgetsController.update(id: String)
+DELETE	/api/widgets/:id			com.playfairy.controllers.WidgetsController.delete(id: String)
