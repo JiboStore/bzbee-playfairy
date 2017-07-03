@@ -11,3 +11,4 @@ target
 public/ipa/CasinoByIGG.app
 public/ipa/CasinoByIGG.ipa
 .sbtserver
+.sbtserver.lock
