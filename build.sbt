@@ -33,6 +33,7 @@ resolvers ++= Seq(
   "Apache" at "http://repo1.maven.org/maven2/",
   "jBCrypt Repository" at "http://repo1.maven.org/maven2/org/",
   "mongo-java-driver" at "https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver",
+  Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns),
   Resolver.url("MongoDB Java Driver", url("https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver"))(Resolver.ivyStylePatterns),
   Resolver.url("Objectify Play Repository", url("http://schaloner.github.io/releases/"))(Resolver.ivyStylePatterns)
 )
