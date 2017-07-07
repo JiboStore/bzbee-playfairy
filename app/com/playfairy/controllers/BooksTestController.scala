@@ -12,6 +12,9 @@ import reactivemongo.api.commands.WriteResult
 import com.playfairy.models._
 import play.Logger
 import scala.concurrent.Future
+import scala.util.Failure
+import scala.util.Success
+
 
 //import javax.inject.Inject
 //import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -112,16 +115,46 @@ class BooksTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   }
   
   def seederClean = Action.async {
-    val future = booksRepo.cleanDatabase();
-    future.map(result => {
-      if ( result ) {
-//        Redirect("http://www.apple.com/sg");
-        Ok("ok")
+    val count: Future[Int] = booksRepo.countAllRecords()
+   
+    val clean = count.flatMap( c => {
+      if ( c > 0 ) {
+        val future = booksRepo.cleanDatabase();
+        future;
       } else {
-//        Redirect("http://www.microsoft.com/");
-        Ok("problem")
+        throw new Exception("nothing to clean")
       }
     });
+    
+    clean.map ( res => {
+      Ok("success")
+    }).recover {
+      case t => Ok("error: " + t)
+    }
+    
+//    clean.map( b => {
+//      case true => Ok("success")
+//      case false => Ok("failed")
+//    }).recover {
+//      case t => Ok("error: " + t)
+//    }
+    
+//    clean.map( (b : Boolean) => b match {
+//      case true => Ok("clean succeeded")
+//      case false => Ok("not cleaned")
+//      case e : Exception => Ok("Exception: " + e)
+//    });
+    
+//    val future = booksRepo.cleanDatabase();
+//    future.map(result => {
+//      if ( result ) {
+////        Redirect("http://www.apple.com/sg");
+//        Ok("ok")
+//      } else {
+////        Redirect("http://www.microsoft.com/");
+//        Ok("problem")
+//      }
+//    });
   }
   
 }
