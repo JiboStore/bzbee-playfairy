@@ -15,8 +15,9 @@ import be.objectify.deadbolt.scala.models.Subject
 import com.deadbolt.models.UserPermission
 import com.deadbolt.models.SecurityRole
 import reactivemongo.api.Cursor
+import scala.collection.immutable.HashMap
 
-case class Users(var username: String) extends Subject {
+case class Users(var username: String, var myRoles: Array[String]) extends Subject {
   override def roles: List[SecurityRole] =
     List(SecurityRole("foo"),
          SecurityRole("bar"))
@@ -33,6 +34,7 @@ object UsersFormats {
   
   // Generates Writes and Reads
   implicit val usersFormats = Json.format[Users]
+//  implicit val usersFormat = Macros.handler[Users]
 }
 
 trait UsersRepo {
@@ -86,7 +88,7 @@ class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Users
   }
   
   def createByName(name:String) : Future[WriteResult] = {
-    val u = new Users(name)
+    val u = new Users(name, Array("hello", "world"))
     val futureInsert = collection.insert(u);
     return futureInsert
   }
