@@ -17,7 +17,7 @@ import com.deadbolt.models.SecurityRole
 import reactivemongo.api.Cursor
 import scala.collection.immutable.HashMap
 
-case class Users(var username: String, var myRoles: Array[String]) extends Subject {
+case class Books(var username: String, var myRoles: Array[String]) extends Subject {
   override def roles: List[SecurityRole] =
     List(SecurityRole("foo"),
          SecurityRole("bar"))
@@ -29,15 +29,15 @@ case class Users(var username: String, var myRoles: Array[String]) extends Subje
   
 }
 
-object Users {
+object Books {
   import play.api.libs.json.Json
   
   // Generates Writes and Reads
-  implicit val usersFormats = Json.format[Users]
-//  implicit val usersFormat = Macros.handler[Users]
+  implicit val booksFormats = Json.format[Books]
+//  implicit val booksFormat = Macros.handler[Books]
 }
 
-trait UsersRepo {
+trait BooksRepo {
   
 //  def find() (implicit ec: ExecutionContext) : Future[List[JsObject]]
 //  
@@ -51,12 +51,12 @@ trait UsersRepo {
   
 }
 
-class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends UsersRepo {
+class BooksRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends BooksRepo {
   
-  import com.playfairy.models.Users._
+  import com.playfairy.models.Books._
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
  
-  def collection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("users");
+  def collection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("books");
  
 //  override def find()(implicit ec: ExecutionContext): Future[List[JsObject]] = {
 //    val genericQueryBuilder = collection.find(Json.obj());
@@ -80,11 +80,11 @@ class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Users
 //    collection.update(BSONDocument("_id" -> document.get("_id").getOrElse(BSONObjectID.generate)), document, upsert = true)
 //  }
   
-  /** Mine - using the UsersFormats */
-  def findByName(name:String) : Future[List[Users]] = {
-    val cursor: Cursor[Users] = collection.find(Json.obj("username" -> name)).cursor[Users]
-    val futureUsersList: Future[List[Users]] = cursor.collect[List]()
-    return futureUsersList
+  /** Mine - using the BooksFormats */
+  def findByName(name:String) : Future[List[Books]] = {
+    val cursor: Cursor[Books] = collection.find(Json.obj("username" -> name)).cursor[Books]
+    val futureBooksList: Future[List[Books]] = cursor.collect[List]()
+    return futureBooksList
   }
   
   /** http://reactivemongo.org/releases/0.11/documentation/tutorial/write-documents.html */
@@ -104,7 +104,7 @@ class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Users
   }
   
   def createByName(name:String) : Future[WriteResult] = {
-    val u = new Users(name, Array("hello", "world"))
+    val u = new Books(name, Array("hello", "world"))
     val futureInsert = collection.insert(u);
     return futureInsert
   }

@@ -23,7 +23,7 @@ import play.Logger
 //import reactivemongo.bson.BSONObjectID
 //import repos.WidgetRepoImpl
 
-class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
+class BooksTestController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
   extends Controller with MongoController with ReactiveMongoComponents {
   
   import com.playfairy.controllers.WidgetFields._
@@ -32,20 +32,20 @@ class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     return reactiveMongoApi;
   }
   
-  def usersRepo = new UsersRepoImpl(reactiveMongoApi)
+  def booksRepo = new BooksRepoImpl(reactiveMongoApi)
   
   def findByName(name: String) = Action.async {
     Logger.debug("findByName: " + name);
-    var future = usersRepo.findByName(name)
-    future.map( listUsers => {
-//      listUsers.map( u => Ok( Json.toJson(u) ) )
-      Ok( Json.toJson(listUsers) )
+    var future = booksRepo.findByName(name)
+    future.map( listBooks => {
+//      listBooks.map( u => Ok( Json.toJson(u) ) )
+      Ok( Json.toJson(listBooks) )
     });
   }
   
   def updateByName(name: String) = Action.async {
     var newRole = List("one", "two", "three")
-    var future = usersRepo.updateByName("hello", newRole)
+    var future = booksRepo.updateByName("hello", newRole)
     future.map(writeResult => {
       if ( writeResult.ok ) {
         Ok("ok")
@@ -56,7 +56,7 @@ class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   }
   
   def seederPopulate = Action.async {
-    val future = usersRepo.createByName("hello")
+    val future = booksRepo.createByName("hello")
     future.map(writeResult => {
       if ( writeResult.ok ) {
 //        Redirect("http://www.apple.com/sg");
@@ -69,7 +69,7 @@ class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   }
   
   def seederClean = Action.async {
-    val future = usersRepo.cleanDatabase();
+    val future = booksRepo.cleanDatabase();
     future.map(result => {
       if ( result ) {
 //        Redirect("http://www.apple.com/sg");
