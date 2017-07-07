@@ -29,7 +29,7 @@ case class Users(var username: String, var myRoles: Array[String]) extends Subje
   
 }
 
-object UsersFormats {
+object Users {
   import play.api.libs.json.Json
   
   // Generates Writes and Reads
@@ -53,7 +53,7 @@ trait UsersRepo {
 
 class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends UsersRepo {
   
-  import com.playfairy.models.UsersFormats._
+  import com.playfairy.models.Users._
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
  
   def collection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("users");
@@ -82,7 +82,7 @@ class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Users
   
   /** Mine - using the UsersFormats */
   def findByName(name:String) : Future[List[Users]] = {
-    val cursor: Cursor[Users] = collection.find(Json.obj("identifier" -> name)).cursor[Users]
+    val cursor: Cursor[Users] = collection.find(Json.obj("username" -> name)).cursor[Users]
     val futureUsersList: Future[List[Users]] = cursor.collect[List]()
     return futureUsersList
   }

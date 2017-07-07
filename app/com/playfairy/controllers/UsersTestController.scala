@@ -10,6 +10,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import reactivemongo.bson._
 import reactivemongo.api.commands.WriteResult
 import com.playfairy.models._
+import play.Logger
 
 //import javax.inject.Inject
 //import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -22,7 +23,7 @@ import com.playfairy.models._
 //import reactivemongo.bson.BSONObjectID
 //import repos.WidgetRepoImpl
 
-class UsersController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
+class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
   extends Controller with MongoController with ReactiveMongoComponents {
   
   import com.playfairy.controllers.WidgetFields._
@@ -32,6 +33,15 @@ class UsersController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   }
   
   def usersRepo = new UsersRepoImpl(reactiveMongoApi)
+  
+  def findByName(name: String) = Action.async {
+    Logger.debug("findByName: " + name);
+    var future = usersRepo.findByName(name)
+    future.map( listUsers => {
+//      listUsers.map( u => Ok( Json.toJson(u) ) )
+      Ok( Json.toJson(listUsers) )
+    });
+  }
   
   def seederPopulate = Action.async {
     val future = usersRepo.createByName("hello")

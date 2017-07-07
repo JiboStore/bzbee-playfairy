@@ -25,8 +25,9 @@ GET		/playfairy/upload/genplist	com.playfairy.controllers.UploadController.genpl
 # tester
 GET		/widgets/seeder/index		com.playfairy.controllers.WidgetsSeederController.index
 GET		/widgets/seeder/cleanup		com.playfairy.controllers.WidgetsSeederController.cleanup
-GET		/users/seeder/populate		com.playfairy.controllers.UsersController.seederPopulate
-GET		/users/seeder/clean			com.playfairy.controllers.UsersController.seederClean
+GET		/users/find/:name			com.playfairy.controllers.UsersTestController.findByName(name: String)
+GET		/users/seeder/populate		com.playfairy.controllers.UsersTestController.seederPopulate
+GET		/users/seeder/clean			com.playfairy.controllers.UsersTestController.seederClean
 
 # API
 GET		/api/widgets				com.playfairy.controllers.WidgetsController.index
