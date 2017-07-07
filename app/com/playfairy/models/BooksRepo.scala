@@ -16,6 +16,10 @@ import com.deadbolt.models.UserPermission
 import com.deadbolt.models.SecurityRole
 import reactivemongo.api.Cursor
 import scala.collection.immutable.HashMap
+import reactivemongo.api.collections.bson.BSONCollection
+import reactivemongo.api.commands.bson.BSONCountCommand.{ Count, CountResult }
+import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
+import reactivemongo.bson.BSONDocument
 
 case class Books(var username: String, var myRoles: Array[String]) extends Subject {
   override def roles: List[SecurityRole] =
@@ -57,6 +61,7 @@ class BooksRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Books
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
  
   def collection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("books");
+  def bsonCollection: BSONCollection = reactiveMongoApi.db.collection[BSONCollection]("books");
  
 //  override def find()(implicit ec: ExecutionContext): Future[List[JsObject]] = {
 //    val genericQueryBuilder = collection.find(Json.obj());
@@ -107,6 +112,16 @@ class BooksRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Books
     val u = new Books(name, Array("hello", "world"))
     val futureInsert = collection.insert(u);
     return futureInsert
+  }
+  
+  def countAllRecords() : Future[Int] = {
+    val query = BSONDocument("_id" -> BSONDocument("$exists" -> true))
+    val command = Count(query)
+    val result: Future[CountResult] = bsonCollection.runCommand(command)
+    result.map( res => {
+      val count: Int = res.value
+      count
+    });
   }
   
   def cleanDatabase() : Future[Boolean] = {

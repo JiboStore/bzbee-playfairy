@@ -11,6 +11,7 @@ import reactivemongo.bson._
 import reactivemongo.api.commands.WriteResult
 import com.playfairy.models._
 import play.Logger
+import scala.concurrent.Future
 
 //import javax.inject.Inject
 //import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -55,17 +56,59 @@ class BooksTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     });
   }
   
-  def seederPopulate = Action.async {
-    val future = booksRepo.createByName("hello")
-    future.map(writeResult => {
-      if ( writeResult.ok ) {
-//        Redirect("http://www.apple.com/sg");
-        Ok("ok");
+  def seederPopulate = Action.async {    
+    val count: Future[Int] = booksRepo.countAllRecords()
+    val countResult: Future[Boolean] = count.map( c => {
+      if ( c > 0 ) {
+        true
       } else {
-//        Redirect("http://www.microsoft.com/");
-        Ok("problem")
+        false
       }
     });
+    
+    val createResult = count.map( c => {
+      if ( c < 1 ) {
+        val future = booksRepo.createByName("hello")
+        future;
+      } else {
+        throw new Exception("already created")
+      }
+    });
+    
+    createResult.map(
+       res => Ok("ok")
+    ).recover{ 
+//      case t => Ok("error")
+      case t => Ok("error: " + t)
+    }
+    
+//    createResult.map( res => {
+//      case w : WriteResult => {
+//        if ( w.ok ) {
+//          Ok("ok")
+//        } else {
+//          Ok("no")
+//        }
+//      }
+//      case e : Exception => {
+//        Ok("no no")
+//      }
+//      case _ => {
+//        Ok("unknown")
+//      }
+//    });
+    
+    
+//    val future = booksRepo.createByName("hello")
+//    future.map(writeResult => {
+//      if ( writeResult.ok ) {
+////        Redirect("http://www.apple.com/sg");
+//        Ok("ok");
+//      } else {
+////        Redirect("http://www.microsoft.com/");
+//        Ok("problem")
+//      }
+//    });
   }
   
   def seederClean = Action.async {
