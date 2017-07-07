@@ -43,13 +43,27 @@ class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     });
   }
   
+  def updateByName(name: String) = Action.async {
+    var newRole = List("one", "two", "three")
+    var future = usersRepo.updateByName("hello", newRole)
+    future.map(writeResult => {
+      if ( writeResult.ok ) {
+        Ok("ok")
+      } else {
+        Ok("problem")
+      }
+    });
+  }
+  
   def seederPopulate = Action.async {
     val future = usersRepo.createByName("hello")
     future.map(writeResult => {
       if ( writeResult.ok ) {
-        Redirect("http://www.apple.com/sg");
+//        Redirect("http://www.apple.com/sg");
+        Ok("ok");
       } else {
-        Redirect("http://www.microsoft.com/");
+//        Redirect("http://www.microsoft.com/");
+        Ok("problem")
       }
     });
   }
@@ -58,9 +72,11 @@ class UsersTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     val future = usersRepo.cleanDatabase();
     future.map(result => {
       if ( result ) {
-        Redirect("http://www.apple.com/sg");
+//        Redirect("http://www.apple.com/sg");
+        Ok("ok")
       } else {
-        Redirect("http://www.microsoft.com/");
+//        Redirect("http://www.microsoft.com/");
+        Ok("problem")
       }
     });
   }

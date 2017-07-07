@@ -87,6 +87,22 @@ class UsersRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Users
     return futureUsersList
   }
   
+  /** http://reactivemongo.org/releases/0.11/documentation/tutorial/write-documents.html */
+  def updateByName(name: String, roles: List[String]) : Future[WriteResult] = {
+    val selector = BSONDocument("username" -> name)
+    val modifier = BSONDocument(
+        "$set" -> BSONDocument(
+            "username" -> name,
+            "myRoles" -> roles
+//         ),
+//         "$unset" -> BSONDocument(
+//             "_id" -> 1
+//         )
+            )
+    )
+    collection.update(selector, modifier)
+  }
+  
   def createByName(name:String) : Future[WriteResult] = {
     val u = new Users(name, Array("hello", "world"))
     val futureInsert = collection.insert(u);
