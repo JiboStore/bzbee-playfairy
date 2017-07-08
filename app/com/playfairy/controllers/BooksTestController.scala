@@ -126,8 +126,25 @@ class BooksTestController @Inject() (reactiveMongoApi: ReactiveMongoApi)
       }
     });
     
-    clean.map ( res => {
-      Ok("success")
+    // this is ok
+//    clean.map ( res => {
+//      Ok("success")
+//    }).recover {
+//      case t => Ok("error: " + t)
+//    }
+    
+//    // this is also ok: https://stackoverflow.com/a/44976467/474330
+//    clean.map{
+//       case true => Ok("success")
+//       case false => Ok("failed")
+//    }.recover {
+//      case t => Ok("error: " + t)
+//    }
+    
+    // this is also ok: https://stackoverflow.com/a/44977295/474330
+    clean.map( b => b match {
+      case true => Ok("success")
+      case false => Ok("failed")
     }).recover {
       case t => Ok("error: " + t)
     }
