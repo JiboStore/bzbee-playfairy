@@ -21,7 +21,7 @@ import reactivemongo.api.commands.bson.BSONCountCommand.{ Count, CountResult }
 import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
 import reactivemongo.bson.BSONDocument
 
-case class Books(var username: String, var myRoles: Array[String]) extends Subject {
+case class Books(var username: String, var myRoles: Array[String], val chapters:Array[Chapters]) extends Subject {
   override def roles: List[SecurityRole] =
     List(SecurityRole("foo"),
          SecurityRole("bar"))
@@ -31,6 +31,16 @@ case class Books(var username: String, var myRoles: Array[String]) extends Subje
 
   override def identifier: String = username
   
+}
+
+case class Chapters(var num: Int, var chapterUrl: String) {
+  
+}
+
+object Chapters {
+  import play.api.libs.json.Json
+  
+  implicit val chaptersFormat = Json.format[Chapters]
 }
 
 object Books {
@@ -109,7 +119,11 @@ class BooksRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Books
   }
   
   def createByName(name:String) : Future[WriteResult] = {
-    val u = new Books(name, Array("hello", "world"))
+    val ch = Array(Chapters(1, "http://www.mangareader.net/video-girl-ai/1"),
+        Chapters(2, "http://www.mangareader.net/video-girl-ai/2"),
+        Chapters(3, "http://www.mangareader.net/video-girl-ai/3")
+    )
+    val u = new Books(name, Array("hello", "world"), ch)
     val futureInsert = collection.insert(u);
     return futureInsert
   }
