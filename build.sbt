@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
   "org.mongodb.morphia" % "morphia-logging-slf4j" % "0.108",
   "org.mongodb.morphia" % "morphia-validation" % "0.108",
   "commons-io" % "commons-io" % "2.4",
+  "org.mindrot" % "jbcrypt" % "0.4",
   filters,
   javaJdbc,
   cache,
