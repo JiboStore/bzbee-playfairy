@@ -22,6 +22,9 @@ GET		/playfairy/upload/index		com.playfairy.controllers.UploadController.index()
 POST	/playfairy/upload/ipa		com.playfairy.controllers.UploadController.ipa()
 GET		/playfairy/upload/genplist	com.playfairy.controllers.UploadController.genplist(id: String?="0")
 
+GET		/playfairy/signup/index		com.playfairy.controllers.SignupController.index()
+POST	/playfairy/signup/create	com.playfairy.controllers.SignupController.create()
+
 # tester
 GET		/widgets/seeder/index		com.playfairy.controllers.WidgetsSeederController.index
 GET		/widgets/seeder/cleanup		com.playfairy.controllers.WidgetsSeederController.cleanup

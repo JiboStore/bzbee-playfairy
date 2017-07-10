@@ -25,9 +25,10 @@ import org.mindrot.jbcrypt.BCrypt
 case class Person(
     var username: String, 
     var pwhash: String, 
-    var pwsalt: String,
-    var role: List[String],
-    var projectIds: List[BSONObjectID]
+    var pwsalt: String
+//    var pwsalt: String,
+//    var role: List[String],
+//    var projectIds: List[BSONObjectID]
 ) extends Subject {
   
   override def identifier: String = {
@@ -35,15 +36,17 @@ case class Person(
   }
   
   override def roles: List[SecurityRole] = {
-    role.map( s => {
-      SecurityRole(s)
-    })
+    List(SecurityRole("none"))
+//    role.map( s => {
+//      SecurityRole(s)
+//    })
   }
   
   override def permissions: List[UserPermission] = {
-    role.map( s => {
-      UserPermission(s)
-    })
+    List(UserPermission("none"))
+//    role.map( s => {
+//      UserPermission(s)
+//    })
   }
   
   var projects: Array[Project] = null
@@ -76,7 +79,8 @@ class PersonRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Pers
   def createPerson(name: String, password: String) : Future[WriteResult] = {
     var salt = BCrypt.gensalt()
     var pw = BCrypt.hashpw(password, salt)
-    val u = new Person(name, pw, salt, null, null)
+//    val u = new Person(name, pw, salt, List(), List())
+    val u = new Person(name, pw, salt)
     bsonCollection.insert(u)
   }
   
