@@ -1,0 +1,11 @@
+@()
+
+@main("Project") {
+  <h1>Create Project!</h1>
+  @helper.form( action = com.playfairy.controllers.routes.ProjectController.create(), 'enctype -> "multipart/form-data") {
+  	Project Name: <input type="text" name="projectName"/><br><br>
+  	<p>
+  		<input type="submit"/>
+  	</p>
+  }
+}
