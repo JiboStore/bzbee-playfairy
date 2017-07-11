@@ -27,7 +27,7 @@ case class Build(
     var gitRev: String, 
     var uploadedDate: Date,
     var versionName: String,
-    var projectId: BSONObjectID
+    var projectName: String
 ) {
   
 }
@@ -35,7 +35,8 @@ case class Build(
 object Build {
   
   // Generates Writes and Reads
-  implicit val buildFormats = Json.format[Build]
+  implicit val buildJsonFormats = Json.format[Build]
+  implicit val buildBsonFormats = Macros.handler[Build]
 //  implicit val buildFormat = Macros.handler[Build]
 }
 
@@ -53,6 +54,38 @@ class BuildRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Build
   def futureCollection: Future[BSONCollection] = reactiveMongoApi.database.map( db => {
     db.collection[BSONCollection]("build")
   });
+  
+  def projectRepo = new ProjectRepoImpl(reactiveMongoApi)
+  
+  def createBuild(svnRev: String, gitRev: String, projectName: String, versionName: String): Future[WriteResult] = {
+    val futureProject: Future[Option[Project]] = projectRepo.findProjectByName(projectName)
+    val futureBuild: Future[Build] = futureProject.map({
+      case Some(p: Project) => {
+       // project found, create the Build obj
+        Build(svnRev, gitRev, new Date(), versionName, p.name)
+      }
+      case None => {
+        // project not found
+        throw new Exception("project not found: " + projectName);
+      }
+    })
+    
+    var res = for (
+        db <- futureCollection;
+        build <- futureBuild;
+        writeResult <- db.insert(build)
+    ) yield {
+      writeResult
+    }
+    // equivalent
+//    var res = futureCollection.flatMap( db => {
+//      futureBuild.flatMap( build => {
+//        db.insert(build)
+//      })
+//    })
+    
+    return res
+  }
   
   /** Mine - using the BuildFormats */
 //  def findByName(name:String) : Future[List[Build]] = {
