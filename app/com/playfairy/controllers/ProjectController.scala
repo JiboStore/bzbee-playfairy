@@ -34,12 +34,13 @@ class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     }
   }
   
-  case class CreateProjectFormData(projectName: String)
+  case class CreateProjectFormData(projectName: String, packageName: String)
   
   def create() : Action[AnyContent] = Action.async { implicit request =>
     val formData = Form(
         mapping(
-            "projectName" -> nonEmptyText
+            "projectName" -> nonEmptyText,
+            "packageName" -> nonEmptyText
         )(CreateProjectFormData.apply)(CreateProjectFormData.unapply)
     )
     formData.bindFromRequest.fold(
@@ -49,7 +50,7 @@ class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi)
           }
         },
         success => {
-          val futureResult = projectRepo.createProject(success.projectName)
+          val futureResult = projectRepo.createProject(success.projectName, success.packageName)
           futureResult.map( writeResult => {
             if ( writeResult.ok ) {
               Ok("project created")

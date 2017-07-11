@@ -27,6 +27,7 @@ import scala.collection.mutable.ListBuffer
 
 case class Project(
     var name: String, 
+    var packageName: String,
     var versions: List[Version]
 ) {
   
@@ -82,9 +83,9 @@ class ProjectRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Pro
     db.collection[BSONCollection]("project")
   });
   
-  def createProject(name: String): Future[WriteResult] = {
+  def createProject(name: String, packageName: String): Future[WriteResult] = {
     val versions = List(Version("1.0", new Date))
-    val project = Project(name, versions)
+    val project = Project(name, packageName, versions)
     futureCollection.flatMap( db => {
       db.insert(project)
     })
