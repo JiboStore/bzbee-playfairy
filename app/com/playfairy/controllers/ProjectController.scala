@@ -61,6 +61,37 @@ class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     )
   }
   
+  def get_addversion(): Action[AnyContent] = Action.async {
+    Future {
+      Ok(com.playfairy.controllers.views.html.project.addversionform())
+    }
+  }
+  
+  case class CreateVersionFormData(projectName: String, versionName: String)
+  
+  def post_addversion(): Action[AnyContent] = Action.async { implicit request =>
+    val formData = Form(
+        mapping(
+            "projectName" -> nonEmptyText,
+            "versionName" -> nonEmptyText
+        )(CreateVersionFormData.apply)(CreateVersionFormData.unapply)
+    )
+    formData.bindFromRequest().fold(
+        hasErrors => {
+          Future {
+            BadRequest("form binding error")
+          }
+        }, 
+        success => {
+          val addResult: Future[Boolean] = projectRepo.addVersion(success.projectName, success.versionName)
+          addResult.map({
+              case true => Ok("version added")
+              case false => Ok("unable to add version")
+          })
+        }
+    )
+  }
+  
 //  case class SignupFormData(username: String, password:String)
 //  
 //  def createPerson() : Action[AnyContent] = Action.async { implicit request =>

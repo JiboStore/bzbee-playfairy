@@ -27,6 +27,8 @@ POST	/playfairy/signup/create	com.playfairy.controllers.SignupController.create(
 
 GET		/playfairy/project/index	com.playfairy.controllers.ProjectController.index()
 POST	/playfairy/project/create	com.playfairy.controllers.ProjectController.create()
+GET		/playfairy/project/addversion	com.playfairy.controllers.ProjectController.get_addversion()
+POST	/playfairy/project/addversion	com.playfairy.controllers.ProjectController.post_addversion()
 
 # tester
 GET		/widgets/seeder/index		com.playfairy.controllers.WidgetsSeederController.index
