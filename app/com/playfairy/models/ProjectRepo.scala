@@ -21,10 +21,13 @@ import reactivemongo.api.commands.bson.BSONCountCommand.{ Count, CountResult }
 import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
 import reactivemongo.bson.BSONDocument
 import java.util.Date
+import reactivemongo.api.collections.bson.BSONQueryBuilder
+import reactivemongo.api.collections.GenericQueryBuilder
+import scala.collection.mutable.ListBuffer
 
 case class Project(
     var name: String, 
-    var versions: Array[Version]
+    var versions: List[Version]
 ) {
   
 }
@@ -37,11 +40,13 @@ case class Version(
 }
 
 object Version {
-  implicit var versionFormat = Json.format[Version]
+  implicit var versionJsonFormat = Json.format[Version]
+  implicit var versionBsonFormat = Macros.handler[Version]
 }
 
 object Project {
-  implicit var projectFormat = Json.format[Project]
+  implicit var projectJsonFormat = Json.format[Project]
+  implicit var projectBsonFormat = Macros.handler[Project]
 }
 
 //case class Chapters(var num: Int, var chapterUrl: String) {
@@ -73,6 +78,66 @@ class ProjectRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Pro
  
   def collection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("project");
   def bsonCollection: BSONCollection = reactiveMongoApi.db.collection[BSONCollection]("project");
+  def futureCollection: Future[BSONCollection] = reactiveMongoApi.database.map( db => {
+    db.collection[BSONCollection]("project")
+  });
+  
+  def createProject(name: String): Future[WriteResult] = {
+    val versions = List(Version("1.0", new Date))
+    val project = Project(name, versions)
+    futureCollection.flatMap( db => {
+      db.insert(project)
+    })
+  }
+  
+  def addVersion(projectName: String, versionName: String): Future[Boolean] = {
+    val futureProject = findProjectByName(projectName)
+    val result: Future[Boolean] = futureProject.flatMap({
+      case Some(p: Project) => {
+        val version = Version(versionName, new Date())
+        val versions = new ListBuffer[Version]
+        versions ++= p.versions
+        versions += version
+        p.versions = versions.toList
+        val fUpdate = updateProjectByName(projectName, p)
+        val fRes = fUpdate.map( res => {
+          if ( res.ok )
+            true
+          else
+            false
+        })
+        fRes
+      }
+      case None => {
+        Future {
+          false
+        }
+      }
+    })
+    return result
+  }
+  
+  def findProjectByName(name: String): Future[Option[Project]] = {
+    val futureProject: Future[Option[Project]] = futureCollection.flatMap( db => {
+      val queryParams: BSONDocument = BSONDocument("name" -> name)
+      db.find(queryParams).one[Project]
+    })
+    return futureProject
+  }
+  
+  def updateProjectByName(name: String, project: Project): Future[WriteResult] = {
+    val selector = BSONDocument("name" -> name)
+    val modifier = BSONDocument(
+        "$set" -> BSONDocument(
+            "name" -> project.name,
+            "versions" -> project.versions
+         )
+    )
+    val result = futureCollection.flatMap( db => {
+      db.update(selector, modifier)
+    })
+    return result
+  }
    
   /** Mine - using the ProjectFormats */
 //  def findByName(name:String) : Future[List[Project]] = {

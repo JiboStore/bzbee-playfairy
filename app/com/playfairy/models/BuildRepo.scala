@@ -20,10 +20,12 @@ import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.api.commands.bson.BSONCountCommand.{ Count, CountResult }
 import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
 import reactivemongo.bson.BSONDocument
+import java.util.Date
 
 case class Build(
     var svnRev: String, 
     var gitRev: String, 
+    var uploadedDate: Date,
     var versionName: String,
     var projectId: BSONObjectID
 ) {
@@ -48,6 +50,9 @@ class BuildRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Build
  
   def collection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("build");
   def bsonCollection: BSONCollection = reactiveMongoApi.db.collection[BSONCollection]("build");
+  def futureCollection: Future[BSONCollection] = reactiveMongoApi.database.map( db => {
+    db.collection[BSONCollection]("build")
+  });
   
   /** Mine - using the BuildFormats */
 //  def findByName(name:String) : Future[List[Build]] = {
