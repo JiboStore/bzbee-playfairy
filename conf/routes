@@ -30,6 +30,9 @@ POST	/playfairy/project/create	com.playfairy.controllers.ProjectController.creat
 GET		/playfairy/project/addversion	com.playfairy.controllers.ProjectController.get_addversion()
 POST	/playfairy/project/addversion	com.playfairy.controllers.ProjectController.post_addversion()
 
+GET		/playfairy/build/index		com.playfairy.controllers.BuildController.index()
+POST	/playfairy/build/create		com.playfairy.controllers.BuildController.create()
+
 # tester
 GET		/widgets/seeder/index		com.playfairy.controllers.WidgetsSeederController.index
 GET		/widgets/seeder/cleanup		com.playfairy.controllers.WidgetsSeederController.cleanup

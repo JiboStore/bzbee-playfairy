@@ -1,0 +1,14 @@
+@()
+
+@main("Build") {
+  <h1>Add Build</h1>
+  @helper.form( action = com.playfairy.controllers.routes.BuildController.create(), 'enctype -> "multipart/form-data") {
+  	SVN Rev: <input type="text" name="svnRev"/><br><br>
+  	GIT Rev: <input type="text" name="gitRev"/><br><br>
+  	Version Name: <input type="text" name="versionName"/><br><br>
+  	Project Name: <input type="text" name="projectName"/><br><br>
+  	<p>
+  		<input type="submit"/>
+  	</p>
+  }
+}
