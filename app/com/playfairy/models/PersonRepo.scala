@@ -75,13 +75,19 @@ class PersonRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Pers
  
   def jsonCollection: JSONCollection = reactiveMongoApi.db.collection[JSONCollection]("person");
   def bsonCollection: BSONCollection = reactiveMongoApi.db.collection[BSONCollection]("person");
+  def futureCollection: Future[BSONCollection] = reactiveMongoApi.database.map( db => {
+    db.collection[BSONCollection]("person")
+  });
   
   def createPerson(name: String, password: String) : Future[WriteResult] = {
     var salt = BCrypt.gensalt()
     var pw = BCrypt.hashpw(password, salt)
     val u = new Person(name, pw, salt, List(), List())
 //    val u = new Person(name, pw, salt)
-    bsonCollection.insert(u)
+//    bsonCollection.insert(u)
+    futureCollection.flatMap( bcol => {
+      bcol.insert(u)
+    })
   }
   
   def authenticatePerson(name: String, password: String) : Future[Boolean] = {
