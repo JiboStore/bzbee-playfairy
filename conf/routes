@@ -3,64 +3,68 @@
 # ~~~~
 
 # An example controller showing a sample home page
-#GET     /                           controllers.HomeController.index
+#GET     /                           @controllers.HomeController.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file               @controllers.Assets.versioned(path="/public", file: Asset)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public-deadbolt", file)
+GET     /assets/*file               @controllers.Assets.at(path="/public-deadbolt", file)
 
 #GET     /playfairy/download         controllers.HomeController.index()
-GET		/playfairy/download/test	com.playfairy.controllers.DownloadController.test()
-GET		/playfairy/download/hardcoded	com.playfairy.controllers.DownloadController.hardcoded()
-GET		/playfairy/download/index	com.playfairy.controllers.DownloadController.index()
-GET		/playfairy/download/ipa		com.playfairy.controllers.DownloadController.ipa()
-GET		/playfairy/download/plist	com.playfairy.controllers.DownloadController.plist(id: String?="0")
+GET		/playfairy/download/test	@com.playfairy.controllers.DownloadController.test()
+GET		/playfairy/download/hardcoded	@com.playfairy.controllers.DownloadController.hardcoded()
+GET		/playfairy/download/index	@com.playfairy.controllers.DownloadController.index()
+GET		/playfairy/download/ipa		@com.playfairy.controllers.DownloadController.ipa()
+GET		/playfairy/download/plist	@com.playfairy.controllers.DownloadController.plist(id: String?="0")
 
-GET		/playfairy/upload/index		com.playfairy.controllers.UploadController.index()
-POST	/playfairy/upload/ipa		com.playfairy.controllers.UploadController.ipa()
-GET		/playfairy/upload/genplist	com.playfairy.controllers.UploadController.genplist(id: String?="0")
+GET		/playfairy/upload/index		@com.playfairy.controllers.UploadController.index()
+POST	/playfairy/upload/ipa		@com.playfairy.controllers.UploadController.ipa()
+GET		/playfairy/upload/genplist	@com.playfairy.controllers.UploadController.genplist(id: String?="0")
 
-GET		/playfairy/signup/index		com.playfairy.controllers.SignupController.index()
-POST	/playfairy/signup/create	com.playfairy.controllers.SignupController.create()
+GET		/playfairy/signup/index		@com.playfairy.controllers.SignupController.index()
+POST	/playfairy/signup/create	@com.playfairy.controllers.SignupController.create()
 
-GET		/playfairy/project/index	com.playfairy.controllers.ProjectController.index()
-POST	/playfairy/project/create	com.playfairy.controllers.ProjectController.create()
-GET		/playfairy/project/addversion	com.playfairy.controllers.ProjectController.get_addversion()
-POST	/playfairy/project/addversion	com.playfairy.controllers.ProjectController.post_addversion()
+GET		/playfairy/login/index		@com.playfairy.controllers.LoginController.index()
+POST	/playfairy/login/login		@com.playfairy.controllers.LoginController.login()
+GET		/playfairy/login/logout		@com.playfairy.controllers.LoginController.logout()
 
-GET		/playfairy/build/index		com.playfairy.controllers.BuildController.index()
-POST	/playfairy/build/create		com.playfairy.controllers.BuildController.create()
+GET		/playfairy/project/index	@com.playfairy.controllers.ProjectController.index()
+POST	/playfairy/project/create	@com.playfairy.controllers.ProjectController.create()
+GET		/playfairy/project/addversion	@com.playfairy.controllers.ProjectController.get_addversion()
+POST	/playfairy/project/addversion	@com.playfairy.controllers.ProjectController.post_addversion()
+
+GET		/playfairy/build/index		@com.playfairy.controllers.BuildController.index()
+POST	/playfairy/build/create		@com.playfairy.controllers.BuildController.create()
 
 # tester
-GET		/widgets/seeder/index		com.playfairy.controllers.WidgetsSeederController.index
-GET		/widgets/seeder/cleanup		com.playfairy.controllers.WidgetsSeederController.cleanup
-GET		/books/find/:name			com.playfairy.controllers.BooksTestController.findByName(name: String)
-GET		/books/update/:name			com.playfairy.controllers.BooksTestController.updateByName(name: String)
-GET		/books/seeder/populate		com.playfairy.controllers.BooksTestController.seederPopulate
-GET		/books/seeder/clean			com.playfairy.controllers.BooksTestController.seederClean
+GET		/widgets/seeder/index		@com.playfairy.controllers.WidgetsSeederController.index
+GET		/widgets/seeder/cleanup		@com.playfairy.controllers.WidgetsSeederController.cleanup
+GET		/books/find/:name			@com.playfairy.controllers.BooksTestController.findByName(name: String)
+GET		/books/update/:name			@com.playfairy.controllers.BooksTestController.updateByName(name: String)
+GET		/books/seeder/populate		@com.playfairy.controllers.BooksTestController.seederPopulate
+GET		/books/seeder/clean			@com.playfairy.controllers.BooksTestController.seederClean
 
 # API
-GET		/api/widgets				com.playfairy.controllers.WidgetsController.index
-POST	/api/widgets				com.playfairy.controllers.WidgetsController.create
-GET		/api/widgets/:id			com.playfairy.controllers.WidgetsController.read(id: String)
-PATCH	/api/widgets/:id			com.playfairy.controllers.WidgetsController.update(id: String)
-DELETE	/api/widgets/:id			com.playfairy.controllers.WidgetsController.delete(id: String)
+GET		/api/widgets				@com.playfairy.controllers.WidgetsController.index
+POST	/api/widgets				@com.playfairy.controllers.WidgetsController.create
+GET		/api/widgets/:id			@com.playfairy.controllers.WidgetsController.read(id: String)
+PATCH	/api/widgets/:id			@com.playfairy.controllers.WidgetsController.update(id: String)
+DELETE	/api/widgets/:id			@com.playfairy.controllers.WidgetsController.delete(id: String)
 
 # DEADBOLT TEST
 # Home page
-GET     /                           com.deadbolt.controllers.Application.index
-GET     /restrict1                  com.deadbolt.controllers.RestrictController.restrictOne
-GET     /restrict2                  com.deadbolt.controllers.RestrictController.restrictTwo
-GET     /restrict3                  com.deadbolt.controllers.RestrictController.restrictThree
-GET     /restrict4                  com.deadbolt.controllers.RestrictController.restrictFour
-GET     /pureLuck                   com.deadbolt.controllers.DynamicRestrictionsController.pureLuck
-GET     /noWayJose                  com.deadbolt.controllers.DynamicRestrictionsController.noWayJose
-GET     /rhp_roleHolderPresent      com.deadbolt.controllers.SubjectPresentController.loggedIn
-GET     /rhp_roleHolderNotPresent   com.deadbolt.controllers.SubjectPresentController.notLoggedIn
-GET     /rhnp_roleHolderPresent     com.deadbolt.controllers.SubjectNotPresentController.loggedIn
-GET     /rhnp_roleHolderNotPresent  com.deadbolt.controllers.SubjectNotPresentController.notLoggedIn
-GET     /printersEdit               com.deadbolt.controllers.PatternController.printersEdit
-GET     /printersFoo                com.deadbolt.controllers.PatternController.printersFoo
-GET     /printersRegex              com.deadbolt.controllers.PatternController.printersRegex
+GET     /                           @com.deadbolt.controllers.Application.index
+GET     /restrict1                  @com.deadbolt.controllers.RestrictController.restrictOne
+GET     /restrict2                  @com.deadbolt.controllers.RestrictController.restrictTwo
+GET     /restrict3                  @com.deadbolt.controllers.RestrictController.restrictThree
+GET     /restrict4                  @com.deadbolt.controllers.RestrictController.restrictFour
+GET     /pureLuck                   @com.deadbolt.controllers.DynamicRestrictionsController.pureLuck
+GET     /noWayJose                  @com.deadbolt.controllers.DynamicRestrictionsController.noWayJose
+GET     /rhp_roleHolderPresent      @com.deadbolt.controllers.SubjectPresentController.loggedIn
+GET     /rhp_roleHolderNotPresent   @com.deadbolt.controllers.SubjectPresentController.notLoggedIn
+GET     /rhnp_roleHolderPresent     @com.deadbolt.controllers.SubjectNotPresentController.loggedIn
+GET     /rhnp_roleHolderNotPresent  @com.deadbolt.controllers.SubjectNotPresentController.notLoggedIn
+GET     /printersEdit               @com.deadbolt.controllers.PatternController.printersEdit
+GET     /printersFoo                @com.deadbolt.controllers.PatternController.printersFoo
+GET     /printersRegex              @com.deadbolt.controllers.PatternController.printersRegex
