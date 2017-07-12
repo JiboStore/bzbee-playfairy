@@ -1,4 +1,7 @@
+@(username: String = "")
+	
 @main("Login") {
+	@loginheader(username)
   <h1>Login</h1>
   @helper.form( action = com.playfairy.controllers.routes.LoginController.login(), 'enctype -> "multipart/form-data") {
   	Username: <input type="text" name="username"/><br><br>
