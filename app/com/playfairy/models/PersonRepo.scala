@@ -21,6 +21,7 @@ import reactivemongo.api.commands.bson.BSONCountCommand.{ Count, CountResult }
 import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
 import reactivemongo.bson.BSONDocument
 import org.mindrot.jbcrypt.BCrypt
+import play.Logger
 
 case class Person(
     var username: String, 
@@ -91,12 +92,13 @@ class PersonRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Pers
   }
   
   def authenticatePerson(name: String, password: String) : Future[Boolean] = {
+    Logger.debug("PersonRepo.authenticatePerson: " + name + ":" + password)
     val query: BSONDocument = BSONDocument("username" -> name)
     val person: Future[Option[Person]] = bsonCollection.find(query).one[Person]
     // simplified
     person.map{
       case Some(p) => {
-        BCrypt.checkpw(password, p.pwsalt)
+        BCrypt.checkpw(password, p.pwhash)
       }
       case None => {
         false
