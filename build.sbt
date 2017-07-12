@@ -27,13 +27,15 @@ libraryDependencies ++= Seq(
   cache,
   javaWs,
   "be.objectify" %% "deadbolt-scala" % "2.5.0",
-  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.14"
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.14",
+  "com.typesafe.play.modules" %% "play-modules-redis" % "2.5.0"
 )
 
 resolvers ++= Seq(
   "Apache" at "http://repo1.maven.org/maven2/",
   "jBCrypt Repository" at "http://repo1.maven.org/maven2/org/",
   "mongo-java-driver" at "https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver",
+  "google-sedis-fix" at "http://pk11-scratch.googlecode.com/svn/trunk",
   Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns),
   Resolver.url("MongoDB Java Driver", url("https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver"))(Resolver.ivyStylePatterns),
   Resolver.url("Objectify Play Repository", url("http://schaloner.github.io/releases/"))(Resolver.ivyStylePatterns)
