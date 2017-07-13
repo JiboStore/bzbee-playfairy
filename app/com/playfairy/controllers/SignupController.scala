@@ -29,7 +29,7 @@ class SignupController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   def booksRepo = new BooksRepoImpl(reactiveMongoApi)
   def personRepo = new PersonRepoImpl(reactiveMongoApi)
   
-  def index() : Action[AnyContent] = Action.async {
+  def index() : Action[AnyContent] = Action.async { implicit request =>
     Future{
       Ok(com.playfairy.controllers.views.html.signup.index())
     }
@@ -69,7 +69,7 @@ class SignupController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     )
   }
   
-  def findByName(name: String) = Action.async {
+  def findByName(name: String) = Action.async { implicit request =>
     Logger.debug("findByName: " + name);
     var future = booksRepo.findByName(name)
     future.map( listBooks => {
@@ -77,7 +77,7 @@ class SignupController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     });
   }
   
-  def updateByName(name: String) = Action.async {
+  def updateByName(name: String) = Action.async { implicit request =>
     var newRole = List("one", "two", "three")
     var future = booksRepo.updateByName("hello", newRole)
     future.map(writeResult => {
@@ -89,7 +89,7 @@ class SignupController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     });
   }
   
-  def seederPopulate = Action.async {    
+  def seederPopulate = Action.async { implicit request =>
     val count: Future[Int] = booksRepo.countAllRecords()
     val countResult: Future[Boolean] = count.map( c => {
       if ( c > 0 ) {
@@ -116,7 +116,7 @@ class SignupController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     
   }
   
-  def seederClean = Action.async {
+  def seederClean = Action.async { implicit request =>
     val count: Future[Int] = booksRepo.countAllRecords()
    
     val clean = count.flatMap( c => {

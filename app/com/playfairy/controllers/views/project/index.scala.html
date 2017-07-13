@@ -2,7 +2,7 @@
 
 @import com.playfairy.controllers.views.html.common._
 
-@mymain("Project") {
+@mymain()("Project") {
   <h1>Create Project!</h1>
   @helper.form( action = com.playfairy.controllers.routes.ProjectController.create(), 'enctype -> "multipart/form-data") {
   	Project Name: <input type="text" name="projectName"/><br><br>

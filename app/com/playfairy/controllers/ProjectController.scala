@@ -28,7 +28,7 @@ class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi)
 //  def personRepo = new PersonRepoImpl(reactiveMongoApi)
   def projectRepo = new ProjectRepoImpl(reactiveMongoApi)
   
-  def index() : Action[AnyContent] = Action.async {
+  def index() : Action[AnyContent] = Action.async { implicit request =>
     Future{
       Ok(com.playfairy.controllers.views.html.project.index())
     }
@@ -62,7 +62,7 @@ class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     )
   }
   
-  def get_addversion(): Action[AnyContent] = Action.async {
+  def get_addversion(): Action[AnyContent] = Action.async { implicit request =>
     Future {
       Ok(com.playfairy.controllers.views.html.project.addversionform())
     }

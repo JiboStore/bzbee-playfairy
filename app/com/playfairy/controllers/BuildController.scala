@@ -26,7 +26,7 @@ class BuildController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   
   def buildRepo = new BuildRepoImpl(reactiveMongoApi)
   
-  def index(): Action[AnyContent] = Action.async {
+  def index(): Action[AnyContent] = Action.async { implicit request =>
     Future{
       Ok(com.playfairy.controllers.views.html.build.index())
     }

@@ -69,7 +69,7 @@ class WidgetsController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     }
   }
   
-  def delete(id: String) = Action.async {
+  def delete(id: String) = Action.async { implicit request =>
     widgetRepo.remove(BSONDocument(Id -> BSONObjectID(id)))
     .map( result => Accepted)
   }

@@ -5,7 +5,7 @@
 
 @(oUser: Option[Person])(implicit request: Request[Any], session: Session)
 	
-@mymain("Login"){
+@mymain()("Login"){
 	@if(oUser.isDefined){
 		@loginheader(oUser.map( u => u.username ).getOrElse(""))
 		
