@@ -1,6 +1,8 @@
 @()
 
-@main("Welcome to Play") {
+@import com.playfairy.controllers.views.html.common._
+
+@mymain("Welcome to Play") {
   <h1>Uploader!</h1>
   @helper.form( action = com.playfairy.controllers.routes.UploadController.ipa(), 'enctype -> "multipart/form-data") {
   	Revision: <input type="text" name="revision"/><br><br>

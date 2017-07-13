@@ -1,6 +1,8 @@
 @()
 
-@main("Signup") {
+@import com.playfairy.controllers.views.html.common._
+
+@mymain("Signup") {
   <h1>Sign Up!</h1>
   @helper.form( action = com.playfairy.controllers.routes.SignupController.create(), 'enctype -> "multipart/form-data") {
   	Username: <input type="text" name="username"/><br><br>

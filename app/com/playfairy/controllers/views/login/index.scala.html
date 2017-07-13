@@ -1,8 +1,9 @@
 @import com.playfairy.models._
+@import com.playfairy.controllers.views.html.common._
 
 @(oUser: Option[Person])
 	
-@main("Login") {
+@mymain("Login") {
 	@if(oUser.isDefined) {
 		@loginheader(oUser.map( u => u.username ).getOrElse(""))
 		

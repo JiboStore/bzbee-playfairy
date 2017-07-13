@@ -1,6 +1,8 @@
+@import com.playfairy.controllers.views.html.common._
+
 @()
 
-@main("Build") {
+@mymain("Build") {
   <h1>Add Build</h1>
   @helper.form( action = com.playfairy.controllers.routes.BuildController.create(), 'enctype -> "multipart/form-data") {
   	SVN Rev: <input type="text" name="svnRev"/><br><br>

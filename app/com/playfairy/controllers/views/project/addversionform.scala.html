@@ -1,6 +1,8 @@
 @()
 
-@main("Add Version") {
+@import com.playfairy.controllers.views.html.common._
+
+@mymain("Add Version") {
   <h1>Create A New Version!</h1>
   @helper.form( action = com.playfairy.controllers.routes.ProjectController.post_addversion(), 'enctype -> "multipart/form-data") {
   		Project Name: <input type="text" name="projectName"/><br><br>
