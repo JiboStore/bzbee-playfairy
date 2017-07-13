@@ -44,6 +44,7 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
 //        }
 //      }
       val sId = oSid.map( sid => sid ).getOrElse("")
+      Logger.debug("LoginController.index sessionId: " + sId)
       val oP = cache.get[Person](sId)
       oP match {
         case Some(person) => {
@@ -116,6 +117,10 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
     )
   }
   
-  def logout() = TODO
+  def logout(): Action[AnyContent] = Action.async {
+    Future {
+      Ok(com.playfairy.controllers.views.html.login.index()).withNewSession
+    }
+  }
   
 }
