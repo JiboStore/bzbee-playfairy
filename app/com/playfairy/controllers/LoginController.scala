@@ -14,6 +14,7 @@ import play.Logger
 import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
+import scala.concurrent.duration._
 import play.api.cache._
 import play.api.data._
 import play.api.data.Forms._
@@ -105,7 +106,7 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
                 case Some(p) => {
                   val sessionId: String = PlayfairyUtils.generateSessionId()
                   Logger.debug("sessionId: " + sessionId)
-                  cache.set(sessionId, p)
+                  cache.set(sessionId, p, 2.hours)
                   Ok(com.playfairy.controllers.views.html.login.index(Some(p))).withSession(
                       request.session + ("sessionId" -> sessionId)
                   )
