@@ -117,9 +117,15 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
     )
   }
   
-  def logout(): Action[AnyContent] = Action.async {
+  def logout(): Action[AnyContent] = Action.async { implicit request =>
     Future {
-      Ok(com.playfairy.controllers.views.html.login.index()).withNewSession
+      val oSid = request.session.get("sessionId")
+      val sId = oSid.map( sid => {
+        cache.remove(sid)
+        sid
+      }).getOrElse("")
+      Logger.debug("LoginController.index sessionId: " + sId)
+      Redirect(com.playfairy.controllers.routes.LoginController.index()).withNewSession
     }
   }
   
