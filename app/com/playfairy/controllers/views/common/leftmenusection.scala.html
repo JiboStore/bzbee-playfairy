@@ -1,0 +1,14 @@
+@import com.playfairy.models._
+
+@(op: Option[Person])
+
+@if(op.isDefined) {
+	<ul>
+		<li> <a href="@com.playfairy.controllers.routes.ProjectController.index()">Project</a> </li>
+		<li> <a href="@com.playfairy.controllers.routes.UploadController.index()">Upload</a> </li>
+	</ul>
+} else {
+	<ul>
+		<li> <a href="@com.playfairy.controllers.routes.LoginController.login()">Login</a> </li>
+	</ul>
+}
