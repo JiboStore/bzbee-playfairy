@@ -91,17 +91,22 @@ class PersonRepoImpl @Inject() (reactiveMongoApi: ReactiveMongoApi) extends Pers
     })
   }
   
-  def authenticatePerson(name: String, password: String) : Future[Boolean] = {
+  def authenticatePerson(name: String, password: String) : Future[Option[Person]] = {
     Logger.debug("PersonRepo.authenticatePerson: " + name + ":" + password)
     val query: BSONDocument = BSONDocument("username" -> name)
     val person: Future[Option[Person]] = bsonCollection.find(query).one[Person]
     // simplified
     person.map{
       case Some(p) => {
-        BCrypt.checkpw(password, p.pwhash)
+        val authenticated = BCrypt.checkpw(password, p.pwhash)
+        if ( authenticated ) {
+          Some(p)
+        } else {
+          None
+        }
       }
       case None => {
-        false
+        None
       }
     }
     // the real meaning

@@ -14,10 +14,12 @@ import play.Logger
 import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
+import play.api.cache._
 import play.api.data._
 import play.api.data.Forms._
+import com.playfairy.utils.PlayfairyUtils
 
-class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
+class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: CacheApi)
   extends Controller with MongoController with ReactiveMongoComponents {
   
   def reactiveMongoApi() : ReactiveMongoApi = {
@@ -26,9 +28,31 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   
   def personRepo = new PersonRepoImpl(reactiveMongoApi)
   
-  def index() : Action[AnyContent] = Action.async {
+  def index() : Action[AnyContent] = Action.async { implicit request =>
     Future{
-      Ok(com.playfairy.controllers.views.html.login.index())
+      val oSid = request.session.get("sessionId")
+      // http://www.nurkiewicz.com/2014/06/optionfold-considered-unreadable.html
+//      val sId: String = oSid.fold("")(_.toString)
+//      val s: String = oSid.fold("")(sid => sid)
+//      val sId: String = oSid.map( sid => sid ).getOrElse("")
+//      val sId = oSid match {
+//        case Some(sid) => {
+//          sid
+//        }
+//        case None => {
+//          ""
+//        }
+//      }
+      val sId = oSid.map( sid => sid ).getOrElse("")
+      val oP = cache.get[Person](sId)
+      oP match {
+        case Some(person) => {
+          Ok(com.playfairy.controllers.views.html.login.index(person.username))
+        }
+        case None => {
+          Ok(com.playfairy.controllers.views.html.login.index())
+        }
+      }
     }
   }
   
@@ -70,14 +94,23 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi)
     loginForm.bindFromRequest.fold(
         hasErrors => {
           Future {
-            Redirect(com.playfairy.controllers.routes.LoginController.index())
+            Redirect(com.playfairy.controllers.routes.LoginController.index()).withNewSession
           }
         },
         success => {
-          val auth: Future[Boolean] = personRepo.authenticatePerson(success.username, success.password)
+          val auth: Future[Option[Person]] = personRepo.authenticatePerson(success.username, success.password)
           auth.map({
-                case true => Ok("success")
-                case false => Ok("unauthorized")
+                case Some(p) => {
+                  val sessionId: String = PlayfairyUtils.generateSessionId()
+                  Logger.debug("sessionId: " + sessionId)
+                  cache.set(sessionId, p)
+                  Ok(com.playfairy.controllers.views.html.login.index(success.username)).withSession(
+                      request.session + ("sessionId" -> sessionId)
+                  )
+                }
+                case None => {
+                  Ok("unauthorized").withNewSession
+                }
           })
         }
     )
