@@ -46,14 +46,15 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
       val sId = oSid.map( sid => sid ).getOrElse("")
       Logger.debug("LoginController.index sessionId: " + sId)
       val oP = cache.get[Person](sId)
-      oP match {
-        case Some(person) => {
-          Ok(com.playfairy.controllers.views.html.login.index(person.username))
-        }
-        case None => {
-          Ok(com.playfairy.controllers.views.html.login.index())
-        }
-      }
+      Ok(com.playfairy.controllers.views.html.login.index(oP))
+//      oP match {
+//        case Some(person) => {
+//          Ok(com.playfairy.controllers.views.html.login.index(person))
+//        }
+//        case None => {
+//          Ok(com.playfairy.controllers.views.html.login.index())
+//        }
+//      }
     }
   }
   
@@ -105,7 +106,7 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
                   val sessionId: String = PlayfairyUtils.generateSessionId()
                   Logger.debug("sessionId: " + sessionId)
                   cache.set(sessionId, p)
-                  Ok(com.playfairy.controllers.views.html.login.index(success.username)).withSession(
+                  Ok(com.playfairy.controllers.views.html.login.index(Some(p))).withSession(
                       request.session + ("sessionId" -> sessionId)
                   )
                 }

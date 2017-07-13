@@ -1,9 +1,15 @@
-@(username: String = "")
+@import com.playfairy.models._
+
+@(oUser: Option[Person])
 	
 @main("Login") {
-	@loginheader(username)
-	
-	@if( username.isEmpty ){
+	@if(oUser.isDefined) {
+		@loginheader(oUser.map( u => u.username ).getOrElse(""))
+		
+		<p>
+  			<a href="@com.playfairy.controllers.routes.LoginController.logout()"> Logout </a>
+  		</p>
+	} else {
 		  <h1>Login</h1>
 		  @helper.form( action = com.playfairy.controllers.routes.LoginController.login(), 'enctype -> "multipart/form-data") {
 		  	Username: <input type="text" name="username"/><br><br>
@@ -13,10 +19,6 @@
 		  	</p>
   	}
   }
-  
-  <p>
-  	<a href="@com.playfairy.controllers.routes.LoginController.logout()"> Logout </a>
-  </p>
   <!-- <p>
   <a href="@routes.Assets.versioned("images/favicon.png")">Play Icon</a>
   </p>
