@@ -12,15 +12,15 @@ GET     /assets/*file               @controllers.Assets.versioned(path="/public"
 GET     /assets/*file               @controllers.Assets.at(path="/public-deadbolt", file)
 
 #GET     /playfairy/download         controllers.HomeController.index()
-GET		/playfairy/download/test	@com.playfairy.controllers.DownloadController.test()
-GET		/playfairy/download/hardcoded	@com.playfairy.controllers.DownloadController.hardcoded()
-GET		/playfairy/download/index	@com.playfairy.controllers.DownloadController.index()
-GET		/playfairy/download/ipa		@com.playfairy.controllers.DownloadController.ipa()
-GET		/playfairy/download/plist	@com.playfairy.controllers.DownloadController.plist(id: String?="0")
+GET		/playfairy/download/test	@com.playfairy.controllers.JDownloadController.test()
+GET		/playfairy/download/hardcoded	@com.playfairy.controllers.JDownloadController.hardcoded()
+GET		/playfairy/download/index	@com.playfairy.controllers.JDownloadController.index()
+GET		/playfairy/download/ipa		@com.playfairy.controllers.JDownloadController.ipa()
+GET		/playfairy/download/plist	@com.playfairy.controllers.JDownloadController.plist(id: String?="0")
 
-GET		/playfairy/upload/index		@com.playfairy.controllers.UploadController.index()
-POST	/playfairy/upload/ipa		@com.playfairy.controllers.UploadController.ipa()
-GET		/playfairy/upload/genplist	@com.playfairy.controllers.UploadController.genplist(id: String?="0")
+GET		/playfairy/upload/index		@com.playfairy.controllers.JUploadController.index()
+POST	/playfairy/upload/ipa		@com.playfairy.controllers.JUploadController.ipa()
+GET		/playfairy/upload/genplist	@com.playfairy.controllers.JUploadController.genplist(id: String?="0")
 
 GET		/playfairy/signup/index		@com.playfairy.controllers.SignupController.index()
 POST	/playfairy/signup/create	@com.playfairy.controllers.SignupController.create()

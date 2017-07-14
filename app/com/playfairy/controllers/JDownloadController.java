@@ -14,7 +14,7 @@ import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class DownloadController extends Controller {
+public class JDownloadController extends Controller {
 	
     /**
      * An action that renders an HTML page with a welcome message.
@@ -24,13 +24,13 @@ public class DownloadController extends Controller {
      */
     public Result hardcoded() {
 //        return ok(views.html.index.render());
-    	return ok(com.playfairy.controllers.views.html.download.hardcoded.render());
+    	return ok(com.playfairy.controllers.views.html.jdownload.hardcoded.render());
     }
     
     public Result test() {
-    	Logger.info(routes.DownloadController.ipa().url().toString()); // /playfairy/download/ipa
-    	Logger.info(routes.DownloadController.ipa().absoluteURL(request()).toString()); // http://10.6.0.18:9443/playfairy/download/ipa
-    	Logger.info(request().toString()); // GET /playfairy/download/test
+    	Logger.info(routes.JDownloadController.ipa().url().toString()); // /playfairy/jdownload/ipa
+    	Logger.info(routes.JDownloadController.ipa().absoluteURL(request()).toString()); // http://10.6.0.18:9443/playfairy/jdownload/ipa
+    	Logger.info(request().toString()); // GET /playfairy/jdownload/test
     	Logger.info(request().host());	// 10.6.0.81:9443
     	return ok(request().uri().toString());
     }
@@ -55,9 +55,9 @@ public class DownloadController extends Controller {
     			}
     		}
     	} catch ( Exception ioe ) {
-    		return ok(com.playfairy.controllers.views.html.download.index.render(szHostname, ipaNames));
+    		return ok(com.playfairy.controllers.views.html.jdownload.index.render(szHostname, ipaNames));
     	}
-    	return ok(com.playfairy.controllers.views.html.download.index.render(szHostname, ipaNames));
+    	return ok(com.playfairy.controllers.views.html.jdownload.index.render(szHostname, ipaNames));
   }
     
     public Result ipa() {
@@ -69,8 +69,8 @@ public class DownloadController extends Controller {
     	response().setHeader("Accept-Ranges", "bytes");
     	response().setHeader("Cache-Control", "no-cache");
     	response().setHeader("Content-Type", "application/octet-stream");
-//    	return ok(com.playfairy.controllers.views.html.download.plist.render(id)).as("application/octet-stream");
-    	return ok(com.playfairy.controllers.views.html.download.plist.render(szHostname, id));
+//    	return ok(com.playfairy.controllers.views.html.jdownload.plist.render(id)).as("application/octet-stream");
+    	return ok(com.playfairy.controllers.views.html.jdownload.plist.render(szHostname, id));
     }
 
 }

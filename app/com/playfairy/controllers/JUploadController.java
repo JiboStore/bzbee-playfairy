@@ -22,7 +22,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 
-public class UploadController extends Controller {
+public class JUploadController extends Controller {
 	
 	/**
 	 * @param ipaBasename - the base filename of the ipa file eg: for CasinoDeluxeByIGG.ipa, id is CasinoDeluxeByIGG
@@ -39,7 +39,7 @@ public class UploadController extends Controller {
     			ipaDir.mkdirs();
     			plistDir.mkdirs();
     		} catch ( Exception e ) {
-    			Logger.debug("UploadController.genplist exception: " + e.getMessage());
+    			Logger.debug("JUploadController.genplist exception: " + e.getMessage());
     		}
     		if ( "0".equals(ipaBasename) ) {
     			// generate for all ipas
@@ -111,7 +111,7 @@ public class UploadController extends Controller {
      */
     public Result index() {
 //        return ok(views.html.index.render());
-    	return ok(com.playfairy.controllers.views.html.upload.index.render());
+    	return ok(com.playfairy.controllers.views.html.jupload.index.render());
     }
     
     public Result ipa() {
