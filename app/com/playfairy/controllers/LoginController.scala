@@ -112,7 +112,9 @@ class LoginController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: Cac
                   )
                 }
                 case None => {
-                  Ok("unauthorized").withNewSession
+                  Redirect(com.playfairy.controllers.routes.LoginController.index())
+                    .withNewSession
+                    .flashing("failed" -> "unable to login")
                 }
           })
         }

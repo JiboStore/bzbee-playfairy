@@ -6,6 +6,14 @@
 @(oUser: Option[Person])(implicit request: Request[Any], session: Session)
 	
 @mymain(oUser)("Login"){
+	
+	@{
+		val sFailed = request.flash.get("failed").getOrElse("")
+		if ( !sFailed.isEmpty ) {
+			<h3>Login Failed</h3>
+		}
+	}
+	
 	@if(oUser.isDefined){
 		@loginheader(oUser.map( u => u.username ).getOrElse(""))
 		
