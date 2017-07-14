@@ -1,8 +1,6 @@
 <classpath>
   <classpathentry kind="src" path="app"/>
   <classpathentry kind="src" path="conf"/>
-  <classpathentry kind="src" path="target/scala-2.11/twirl/main"/>
-  <classpathentry kind="src" path="target/scala-2.11/routes/main"/>
   <classpathentry excluding="resources/" kind="src" path="test"/>
   <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
   <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/com.typesafe.play/twirl-api_2.11/srcs/twirl-api_2.11-1.1.1-sources.jar" kind="lib" path="/Development/tools/activator-dist-1.3.12/repository/com.typesafe.play/twirl-api_2.11/1.1.1/jars/twirl-api_2.11.jar">
@@ -517,6 +515,31 @@
   <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/org.reactivemongo/reactivemongo-play-json_2.11/srcs/reactivemongo-play-json_2.11-0.11.14-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/org.reactivemongo/reactivemongo-play-json_2.11/jars/reactivemongo-play-json_2.11-0.11.14.jar">
     <attributes>
       <attribute name="javadoc_location" value="jar:file:/Users/hakimhauston/.ivy2/cache/org.reactivemongo/reactivemongo-play-json_2.11/docs/reactivemongo-play-json_2.11-0.11.14-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/com.typesafe.play.modules/play-modules-redis_2.11/srcs/play-modules-redis_2.11-2.5.0-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/com.typesafe.play.modules/play-modules-redis_2.11/jars/play-modules-redis_2.11-2.5.0.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/hakimhauston/.ivy2/cache/com.typesafe.play.modules/play-modules-redis_2.11/docs/play-modules-redis_2.11-2.5.0-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/biz.source_code/base64coder/srcs/base64coder-2010-12-19-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/biz.source_code/base64coder/bundles/base64coder-2010-12-19.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/hakimhauston/.ivy2/cache/biz.source_code/base64coder/docs/base64coder-2010-12-19-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/org.sedis/sedis_2.11/srcs/sedis_2.11-1.2.2-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/org.sedis/sedis_2.11/jars/sedis_2.11-1.2.2.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/hakimhauston/.ivy2/cache/org.sedis/sedis_2.11/docs/sedis_2.11-1.2.2-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/redis.clients/jedis/srcs/jedis-2.4.2-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/redis.clients/jedis/jars/jedis-2.4.2.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/hakimhauston/.ivy2/cache/redis.clients/jedis/docs/jedis-2.4.2-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/org.apache.commons/commons-pool2/srcs/commons-pool2-2.0-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/org.apache.commons/commons-pool2/jars/commons-pool2-2.0.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:file:/Users/hakimhauston/.ivy2/cache/org.apache.commons/commons-pool2/docs/commons-pool2-2.0-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
   <classpathentry sourcepath="/Users/hakimhauston/.ivy2/cache/com.typesafe.play/play-test_2.11/srcs/play-test_2.11-2.5.14-sources.jar" kind="lib" path="/Users/hakimhauston/.ivy2/cache/com.typesafe.play/play-test_2.11/jars/play-test_2.11-2.5.14.jar">
