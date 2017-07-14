@@ -16,8 +16,10 @@ import scala.util.Failure
 import scala.util.Success
 import play.api.data._
 import play.api.data.Forms._
+import com.playfairy.utils.PlayfairyUtils
+import play.api.cache.CacheApi
 
-class BuildController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
+class BuildController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: CacheApi)
   extends Controller with MongoController with ReactiveMongoComponents {
   
   def reactiveMongoApi() : ReactiveMongoApi = {
@@ -27,8 +29,11 @@ class BuildController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   def buildRepo = new BuildRepoImpl(reactiveMongoApi)
   
   def index(): Action[AnyContent] = Action.async { implicit request =>
+//    implicit val sess = request.session
+    implicit val cach = cache
     Future{
-      Ok(com.playfairy.controllers.views.html.build.index())
+      var oP = PlayfairyUtils.getPersonFromCache
+      Ok(com.playfairy.controllers.views.html.build.index(oP))
     }
   }
   

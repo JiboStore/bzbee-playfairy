@@ -16,8 +16,10 @@ import scala.util.Failure
 import scala.util.Success
 import play.api.data._
 import play.api.data.Forms._
+import com.playfairy.utils.PlayfairyUtils
+import play.api.cache.CacheApi
 
-class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi) 
+class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi) (cache: CacheApi)
   extends Controller with MongoController with ReactiveMongoComponents {
   
   def reactiveMongoApi() : ReactiveMongoApi = {
@@ -30,7 +32,9 @@ class ProjectController @Inject() (reactiveMongoApi: ReactiveMongoApi)
   
   def index() : Action[AnyContent] = Action.async { implicit request =>
     Future{
-      Ok(com.playfairy.controllers.views.html.project.index())
+      implicit val cach = cache
+      var oP = PlayfairyUtils.getPersonFromCache
+      Ok(com.playfairy.controllers.views.html.project.index(oP))
     }
   }
   

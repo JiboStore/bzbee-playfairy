@@ -1,10 +1,11 @@
 @import com.playfairy.controllers.views.html.common._
+@import com.playfairy.models._
 @import play.api.mvc._
 @import play.mvc.Http.Context.Implicit._ 
 
-@()(implicit request: Request[Any], session: Session)
+@(oP: Option[Person] = None)(implicit request: Request[Any], session: Session)
 
-@mymain()("Build") {
+@mymain(oP)("Build") {
   <h1>Add Build</h1>
   @helper.form( action = com.playfairy.controllers.routes.BuildController.create(), 'enctype -> "multipart/form-data") {
   	SVN Rev: <input type="text" name="svnRev"/><br><br>
