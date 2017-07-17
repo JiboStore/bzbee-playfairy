@@ -67,7 +67,7 @@ public class JUploadController extends Controller {
     			String szPlistFile = szPlistDir + ipaNames.get(i) + ".plist";
     			File ipaFile = new File(szIpaFile);
     			if ( ipaFile.exists() ) {
-    				String szPlistContent = com.playfairy.controllers.views.html.download.plisttemplate.render(szHostname, ipaNames.get(i)).toString();
+    				String szPlistContent = com.playfairy.controllers.views.html.jdownload.plisttemplate.render(szHostname, ipaNames.get(i)).toString();
     				FileUtils.writeStringToFile(new File(szPlistFile), szPlistContent, false);
     			}
     		}
