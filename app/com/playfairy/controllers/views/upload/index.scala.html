@@ -1,0 +1,34 @@
+@import com.playfairy.models._
+@import com.playfairy.controllers.views.html.common._
+@import play.api.mvc._
+@import play.mvc.Http.Context.Implicit._ 
+
+@(oUser: Option[Person])(implicit request: Request[Any], session: Session)
+
+@import com.playfairy.controllers.views.html.common._
+
+@mymain()("Welcome to Play") {
+  <h1>Uploader!</h1>
+  @helper.form( action = com.playfairy.controllers.routes.JUploadController.ipa(), 'enctype -> "multipart/form-data") {
+  	Revision: <input type="text" name="revision"/><br><br>
+  	SHA: <input type="text" name="sha"/><br><br>
+  	<input type="file" name="ipa"/>
+  	<p>
+  		<input type="submit"/>
+  	</p>
+  }
+  <!-- <p>
+  <a href="@routes.Assets.versioned("images/favicon.png")">Play Icon</a>
+  </p>
+  -->
+  <p>
+  <!-- <a href="@routes.Assets.versioned("hardcoded.plist")">Download hardcoded ipa</a> -->
+  <h2>
+  	<a href="https://10.6.0.18:9443/assets/ipa/hakimmbp.crt">Download server SSL certificate</a>
+  </h2>
+  <!-- <h2>
+  	<a href="itms-services://?action=download-manifest&amp;url=https://10.6.0.18:9443/assets/hardcoded.plist">Download hardcoded ipa</a>
+  </h2>
+  -->
+  </p>
+}
